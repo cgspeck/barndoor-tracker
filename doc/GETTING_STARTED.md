@@ -12,7 +12,7 @@ In order to:
 * have a project structure that makes sense to a professional software developer
 * expose the C/C++ search paths so that IDEs/editors other then the Arduino one can be used
 * have a build tool-chain that will allow any C/C++ library to be used
-* allow the use of unit testing / [BDD] / mocking libraries
+* allow the use of [unit testing] / [BDD] / [mocking] libraries
 
 ## How?
 
@@ -36,3 +36,5 @@ More on [advance usage of the makeEspArduino].
 [the instructions]: https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/debian_ubuntu.md
 [makeEspArduino project]: https://github.com/plerup/makeEspArduino
 [advance usage of the makeEspArduino]: https://github.com/plerup/makeEspArduino#advanced-usage
+[unit testing]: http://www.throwtheswitch.org/unity
+[mocking]: http://www.throwtheswitch.org/cmock

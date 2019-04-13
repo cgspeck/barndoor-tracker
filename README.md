@@ -19,5 +19,4 @@ make test
 make upload
 ```
 
-
 [Getting Started]: doc/GETTING_STARTED.md
