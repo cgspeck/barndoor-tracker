@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/share/arduino/hardware/**",
+                "/usr/share/arduino/libraries/**",
+                "/usr/lib/avr/include/**"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "/usr/lib/avr/include",
+                    "/usr/share/arduino/hardware",
+                    "/usr/share/arduino/libraries",
+                    "${workspaceRoot}"
+                ]
+            },
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

@@ -25,7 +25,14 @@ This will:
 * clone the Espressif ESP32 board support repo to `/usr/share/arduino/hardware/espressif` in accordance with [the instructions]
 * checkout the [makeEspArduino project] as a sub-module
 
+At the end of the setup build the demo app to test that everything is working: `make DEMO=1`
+
+Then make the main project with `make`.
+
+More on [advance usage of the makeEspArduino].
+
 [Adafruit_ILI9341]: https://github.com/adafruit/Adafruit_ILI9341/
 [BDD]: https://cgreen-devs.github.io/
 [the instructions]: https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/debian_ubuntu.md
-[makeEspArduino]: https://github.com/plerup/makeEspArduino
+[makeEspArduino project]: https://github.com/plerup/makeEspArduino
+[advance usage of the makeEspArduino]: https://github.com/plerup/makeEspArduino#advanced-usage
