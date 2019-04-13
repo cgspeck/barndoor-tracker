@@ -25,4 +25,4 @@ if [[ ! -d $ESPRESSIF_DIR ]]; then
   cd $_pwd
 fi
 
-wget https://raw.githubusercontent.com/plerup/makeEspArduino/master/makeEspArduino.mk -O Makefile
+./scripts/update-submodules.sh
