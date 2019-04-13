@@ -2,7 +2,6 @@ ESP_LIBS = $(ESP_ROOT)/libraries
 
 LIBS=./src \
 	./libraries \
-	./test \
 	$(ESP_LIBS)/EEPROM
 
 SKETCH=src/main.ino

@@ -2,10 +2,13 @@ ESP_LIBS = $(ESP_ROOT)/libraries
 
 LIBS=./src \
 	./libraries \
-	/usr/local/include/cgreen/* \
+	/usr/local/lib/libcgreen.so \
+	/usr/local/include/cgreen/cgreen.h \
+	/usr/local/include/cgreen/unit.h \
 	./test \
 	$(ESP_LIBS)/EEPROM
 
+	# /usr/local/include/cgreen/* \
 # /usr/local/include
 
 #	./vendor/cgreen-1.1.0/include/

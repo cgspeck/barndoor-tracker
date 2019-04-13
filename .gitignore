@@ -2,3 +2,6 @@ build/
 .vscode/ipch
 .vscode/.browse.c_cpp.db
 vendor/cgreen-1.1.0/
+tests/*.so
+tests/*.o
+
