@@ -5,7 +5,9 @@
 
 class StateMachine: public Runnable {
 private:
-    /* data */
+    const int SERIAL_REPORT_INTERVAL = 1000;
+    unsigned long previousSerialReportMillis = 0;
+
 public:
     StateMachine(/* args */);
     ~StateMachine();

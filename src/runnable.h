@@ -1,7 +1,7 @@
 #ifndef runnable_h
 #define runnable_h
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 class Runnable {
     static Runnable *headRunnable;
@@ -14,8 +14,13 @@ class Runnable {
     virtual void loop() = 0;
 
     static void setupAll() {
+        Serial.println("Runnable::setupAll");
         for (Runnable *r = headRunnable; r; r = r->nextRunnable)
+        {
+            Serial.println("Runnable::setupAll: calling subsetup");
             r->setup();
+            Serial.println("Runnable::setupAll: runnable after subsetup");
+        }
     }
 
     static void loopAll() {
