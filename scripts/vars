@@ -1,0 +1,3 @@
+CGREEN_VERSION=1.1.0
+CGREEN_DEST=vendor/cgreen-$CGREEN_VERSION/
+ESPRESSIF_DIR=/usr/share/arduino/hardware/espressif

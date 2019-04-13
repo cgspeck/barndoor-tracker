@@ -16,7 +16,7 @@ Build commands:
 make clean
 make
 make test
-make upload
+make flask
 ```
 
 [Getting Started]: doc/GETTING_STARTED.md

@@ -2,8 +2,13 @@ ESP_LIBS = $(ESP_ROOT)/libraries
 
 LIBS=./src \
 	./libraries \
+	/usr/local/include/cgreen/* \
 	./test \
 	$(ESP_LIBS)/EEPROM
+
+# /usr/local/include
+
+#	./vendor/cgreen-1.1.0/include/
 
 SKETCH=src/main.ino
 
