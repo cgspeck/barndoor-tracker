@@ -23,9 +23,9 @@ This will:
 * setup the Arduino dependencies
 * add your user to `dialout`
 * clone the Espressif ESP32 board support repo to `/usr/share/arduino/hardware/espressif` in accordance with [the instructions]
-* 
-
+* checkout the [makeEspArduino project] as a sub-module
 
 [Adafruit_ILI9341]: https://github.com/adafruit/Adafruit_ILI9341/
 [BDD]: https://cgreen-devs.github.io/
 [the instructions]: https://github.com/espressif/arduino-esp32/blob/master/docs/arduino-ide/debian_ubuntu.md
+[makeEspArduino]: https://github.com/plerup/makeEspArduino
