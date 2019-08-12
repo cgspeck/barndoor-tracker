@@ -1,13 +1,12 @@
 #include <Arduino.h>
 
+#define REPORT_INTEVAL 1000
+
 #include "runnable.h"
 #include "state_machine.h"
 
 Runnable *Runnable::headRunnable = NULL;
 StateMachine stateMachine;
-
-const int SERIAL_REPORT_INTERVAL = 1000;
-unsigned long previousSerialReportMillis = 0;
 
 void setup() {
   // put your setup code here, to run once:

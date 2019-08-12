@@ -10,6 +10,8 @@ class Persistence {
     static const int SCHEMA_ADDRESS = 0;  // int, 4 bytes
     static const int LATITUDE_SET_ADDRESS = 4;  // bool, 1 byte
     static const int LATITUDE_ADDRESS = 5;  // int, 4 bytes
+    static const int MAGNETIC_DECLINATION_SET_ADDRESS = 9;  // bool, 1 byte
+    static const int MAGNETIC_DECLINATION_ADDRESS = 10;  // int, 4 bytes
 
 
   public:
@@ -24,6 +26,10 @@ class Persistence {
     bool isLatitudeSet();
     void setLatitude(int);
     int getLatitude();
+
+    bool isMagneticDeclinationSet();
+    void setMagneticDeclination(int);
+    int getMagneticDeclination();
 };
 
 #endif

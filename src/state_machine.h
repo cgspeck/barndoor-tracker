@@ -2,6 +2,8 @@
 #define state_machine_h
 
 #include "runnable.h"
+#include "persistence.h"
+#include "latitude_config.h"
 
 class StateMachine: public Runnable {
 private:
@@ -14,6 +16,9 @@ private:
       FIRST_CONFIG_LATITUDE = 200,
       CONFIG_LATITUDE = 300
     } state;
+
+    Persistence m_persistence;
+    LatitudeConfig m_latitude_config;
 
 public:
     StateMachine(/* args */);

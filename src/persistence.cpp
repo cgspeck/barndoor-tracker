@@ -43,3 +43,15 @@ void Persistence::setLatitude(int val) {
     EEPROM.writeInt(LATITUDE_ADDRESS, val);
 }
 
+bool Persistence::isMagneticDeclinationSet() {
+    return EEPROM.readBool(MAGNETIC_DECLINATION_SET_ADDRESS);
+}
+
+int Persistence::getMagneticDeclination() {
+    return EEPROM.readInt(MAGNETIC_DECLINATION_ADDRESS);
+}
+
+void Persistence::setMagneticDeclination(int val) {
+    EEPROM.writeInt(MAGNETIC_DECLINATION_ADDRESS, val);
+}
+
