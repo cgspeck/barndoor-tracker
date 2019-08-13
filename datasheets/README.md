@@ -51,6 +51,8 @@ TMC2130 evaluation board.
 
 [Purchase page](https://www.aliexpress.com/item/32853263225.html?spm=a2g0s.9042311.0.0.27424c4drxUNUe).
 
+[Wiki](https://wiki.fysetc.com/TMC2130/)
+
 ## Display
 
 SPI(?)
