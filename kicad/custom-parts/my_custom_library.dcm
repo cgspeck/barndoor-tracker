@@ -4,4 +4,8 @@ $CMP HUZZAH32
 F https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/downloads
 $ENDCMP
 #
+$CMP SparkFun_9Dof_Sensor_Stick
+F https://learn.sparkfun.com/tutorials/9dof-sensor-stick-hookup-guide#hardware-connections
+$ENDCMP
+#
 #End Doc Library

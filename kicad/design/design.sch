@@ -30,7 +30,7 @@ U 1 1 5D529A5A
 P 2650 1200
 F 0 "J1" H 2758 1481 50  0000 C CNN
 F 1 "Conn_USB_PWR" H 2758 1390 50  0000 C CNN
-F 2 "" H 2650 1200 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical" H 2650 1200 50  0001 C CNN
 F 3 "~" H 2650 1200 50  0001 C CNN
 	1    2650 1200
 	-1   0    0    1   
@@ -41,7 +41,7 @@ U 1 1 5D52A236
 P 2650 1850
 F 0 "J2" H 2622 1732 50  0000 R CNN
 F 1 "Conn_USB_HEATER" H 2622 1823 50  0000 R CNN
-F 2 "" H 2650 1850 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical" H 2650 1850 50  0001 C CNN
 F 3 "~" H 2650 1850 50  0001 C CNN
 	1    2650 1850
 	-1   0    0    1   
@@ -142,7 +142,7 @@ U 1 1 5D54B88B
 P 2800 3250
 F 0 "J3" H 2828 3276 50  0000 L CNN
 F 1 "Conn_Temp_Probe" H 2828 3185 50  0000 L CNN
-F 2 "" H 2800 3250 50  0001 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical" H 2800 3250 50  0001 C CNN
 F 3 "~" H 2800 3250 50  0001 C CNN
 	1    2800 3250
 	1    0    0    -1  
@@ -169,27 +169,113 @@ F 3 "" H 2600 3150 50  0001 C CNN
 	1    2600 3150
 	0    1    1    0   
 $EndComp
+Wire Wire Line
+	2250 3250 2600 3250
+$Comp
+L my_custom_library:SparkFun_9Dof_Sensor_Stick U2
+U 1 1 5D55D4E0
+P 5150 2150
+F 0 "U2" H 5428 2246 50  0000 L CNN
+F 1 "SparkFun_9Dof_Sensor_Stick" H 5428 2155 50  0000 L CNN
+F 2 "Custom_Modules:SparkFun_9DoF_Sensor_Stick" H 4850 2550 50  0001 C CNN
+F 3 "" H 4850 2550 50  0001 C CNN
+	1    5150 2150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 3650 2600 3900
 $Comp
 L Device:R R2
 U 1 1 5D55312E
 P 2600 3500
 F 0 "R2" V 2393 3500 50  0000 C CNN
-F 1 "R" V 2484 3500 50  0000 C CNN
+F 1 "4K7" V 2484 3500 50  0000 C CNN
 F 2 "" V 2530 3500 50  0001 C CNN
 F 3 "~" H 2600 3500 50  0001 C CNN
 	1    2600 3500
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2250 3250 2600 3250
-Wire Wire Line
-	2250 3250 2250 3650
+Connection ~ 2600 3650
 Wire Wire Line
 	2250 3650 2600 3650
 Connection ~ 2250 3250
 Wire Wire Line
-	2600 3650 2600 3900
-Connection ~ 2600 3650
+	2250 3250 2250 3650
 Text Label 2600 3900 0    50   ~ 0
 TemperatureSensor
+$Comp
+L power:+3V3 #PWR0101
+U 1 1 5D563AE9
+P 5150 1700
+F 0 "#PWR0101" H 5150 1550 50  0001 C CNN
+F 1 "+3V3" H 5165 1873 50  0000 C CNN
+F 2 "" H 5150 1700 50  0001 C CNN
+F 3 "" H 5150 1700 50  0001 C CNN
+	1    5150 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0102
+U 1 1 5D5641C9
+P 5150 2500
+F 0 "#PWR0102" H 5150 2250 50  0001 C CNN
+F 1 "GND" H 5155 2327 50  0000 C CNN
+F 2 "" H 5150 2500 50  0001 C CNN
+F 3 "" H 5150 2500 50  0001 C CNN
+	1    5150 2500
+	1    0    0    -1  
+$EndComp
+Text Label 4800 2050 2    50   ~ 0
+i2cBus
+Text Label 7000 3400 2    50   ~ 0
+i2cBus
+Text Label 4800 2150 2    50   ~ 0
+i2cClock
+Text Label 7000 3300 2    50   ~ 0
+i2cClock
+Text Notes 5300 2600 0    50   ~ 0
+NOTE: Contains internal\n4k7 pullup resistor
+$Comp
+L Connector:Conn_01x05_Female J4
+U 1 1 5D568BF1
+P 4900 3450
+F 0 "J4" H 4928 3476 50  0000 L CNN
+F 1 "Conn_LED" H 4928 3385 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 4900 3450 50  0001 C CNN
+F 3 "~" H 4900 3450 50  0001 C CNN
+	1    4900 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0103
+U 1 1 5D569E77
+P 4700 3250
+F 0 "#PWR0103" H 4700 3100 50  0001 C CNN
+F 1 "+5V" V 4715 3378 50  0000 L CNN
+F 2 "" H 4700 3250 50  0001 C CNN
+F 3 "" H 4700 3250 50  0001 C CNN
+	1    4700 3250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0104
+U 1 1 5D56A9E5
+P 4700 3350
+F 0 "#PWR0104" H 4700 3100 50  0001 C CNN
+F 1 "GND" V 4705 3222 50  0000 R CNN
+F 2 "" H 4700 3350 50  0001 C CNN
+F 3 "" H 4700 3350 50  0001 C CNN
+	1    4700 3350
+	0    1    1    0   
+$EndComp
+Text Label 4700 3450 2    50   ~ 0
+MOSI_Bus
+Text Label 4700 3650 2    50   ~ 0
+SCK_Bus
+Text Label 7000 3700 2    50   ~ 0
+MOSI_Bus
+Text Label 7000 3600 2    50   ~ 0
+SCK_Bus
+Text Label 4700 3550 2    50   ~ 0
+LED_CS
 $EndSCHEMATC
