@@ -1,4 +1,4 @@
-16276149990507836
+16277715693665840
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -42615,6 +42615,13 @@ THT ceramic resonator filter DSS6
 0
 3
 3
+Custom_Modules
+SparkFun_9DoF_Sensor_Stick
+
+
+0
+0
+0
 Diode_SMD
 D_0201_0603Metric
 Diode SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
@@ -49568,8 +49575,8 @@ Yellow 5381 Series LED
 2
 MCU_Adafruit
 Adafruit_HUZZAH_ESP32_3405
-
-
+ESP32-based Feather, made with the official WROOM32 module https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/downloads
+ESP32 HUZZAH32 Adafruit Feather
 0
 28
 28
