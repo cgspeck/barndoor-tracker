@@ -1,3 +1,7 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP HUZZAH32
+F https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/downloads
+$ENDCMP
+#
 #End Doc Library

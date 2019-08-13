@@ -1,4 +1,6 @@
-(module Adafruit_HUZZAH_ESP32_3405 (layer F.Cu) (tedit 5D51ED61)
+(module Adafruit_HUZZAH_ESP32_3405 (layer F.Cu) (tedit 5D51F526)
+  (descr "ESP32-based Feather, made with the official WROOM32 module https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/downloads")
+  (tags "ESP32 HUZZAH32 Adafruit Feather")
   (fp_text reference REF** (at 0 2.54) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
