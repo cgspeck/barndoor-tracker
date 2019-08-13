@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name MCU_Adafruit)(type KiCad)(uri /home/chris/src/barndoor-tracker/kicad/custom-parts/MCU_Adafruit.pretty)(options "")(descr ""))
+)

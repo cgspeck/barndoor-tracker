@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name MCU_Adafruit)(type Legacy)(uri /home/chris/src/barndoor-tracker/kicad/custom-parts/MCU_Adafruit.lib)(options "")(descr "")(disabled))
+  (lib (name my_custom_library)(type Legacy)(uri /home/chris/src/barndoor-tracker/kicad/custom-parts/my_custom_library.lib)(options "")(descr ""))
+)
