@@ -80,3 +80,18 @@ Need 4:
  * unassigned
  * (rescessed) system reset
 
+https://learn.adafruit.com/adafruit-huzzah32-esp32-feather/pinouts
+https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+https://esp32.com/viewtopic.php?t=2278
+
+## Intervalometer / shutter release
+
+Inspirations:
+
+https://www.instructables.com/id/Trigger-your-DSLR-wirelessly-with-smartphone-and-E/
+https://hackaday.io/project/9234/gallery#0dfe23a97ffefe2d6e8b4a7f6a342775
+https://hackaday.io/project/9234-canon-dslr-wifimote
+https://hackaday.com/2016/01/24/five-bucks-three-parts-wifi-camera-remote/
+https://hackaday.com/wp-content/uploads/2016/01/schematic.png
+http://www.doc-diy.net/photo/eos_wired_remote/
+

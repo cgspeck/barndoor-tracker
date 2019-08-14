@@ -1,5 +1,6 @@
 EESchema Schematic File Version 4
-EELAYER 30 0
+LIBS:design-cache
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -14,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L my_custom_library:HUZZAH32 U1
+L design-rescue:HUZZAH32-my_custom_library U1
 U 1 1 5D523388
 P 7700 2650
 F 0 "U1" H 7650 1261 50  0000 C CNN
@@ -172,7 +173,7 @@ $EndComp
 Wire Wire Line
 	2250 3250 2600 3250
 $Comp
-L my_custom_library:SparkFun_9Dof_Sensor_Stick U2
+L design-rescue:SparkFun_9Dof_Sensor_Stick-my_custom_library U2
 U 1 1 5D55D4E0
 P 5150 2150
 F 0 "U2" H 5428 2246 50  0000 L CNN
@@ -278,4 +279,102 @@ Text Label 7000 3600 2    50   ~ 0
 SCK_Bus
 Text Label 4700 3550 2    50   ~ 0
 LED_CS
+$Comp
+L Connector:Conn_01x03_Female J5
+U 1 1 5D5372C8
+P 5750 4800
+F 0 "J5" H 5778 4826 50  0000 L CNN
+F 1 "Conn_Shutter" H 5778 4735 50  0000 L CNN
+F 2 "" H 5750 4800 50  0001 C CNN
+F 3 "~" H 5750 4800 50  0001 C CNN
+	1    5750 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:ILD74 U3
+U 1 1 5D53AFDD
+P 3650 4600
+F 0 "U3" H 3650 4925 50  0000 C CNN
+F 1 "ILD74" H 3650 4834 50  0000 C CNN
+F 2 "" H 3450 4400 50  0001 L CIN
+F 3 "https://www.vishay.com/docs/83640/ild74.pdf" H 3650 4600 50  0001 L CNN
+	1    3650 4600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:ILD74 U3
+U 2 1 5D53FAAC
+P 3650 5200
+F 0 "U3" H 3650 5525 50  0000 C CNN
+F 1 "ILD74" H 3650 5434 50  0000 C CNN
+F 2 "" H 3450 5000 50  0001 L CIN
+F 3 "https://www.vishay.com/docs/83640/ild74.pdf" H 3650 5200 50  0001 L CNN
+	2    3650 5200
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R3
+U 1 1 5D541297
+P 3200 4500
+F 0 "R3" V 2993 4500 50  0000 C CNN
+F 1 "R" V 3084 4500 50  0000 C CNN
+F 2 "" V 3130 4500 50  0001 C CNN
+F 3 "~" H 3200 4500 50  0001 C CNN
+	1    3200 4500
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R4
+U 1 1 5D541B6C
+P 3200 5100
+F 0 "R4" V 2993 5100 50  0000 C CNN
+F 1 "R" V 3084 5100 50  0000 C CNN
+F 2 "" V 3130 5100 50  0001 C CNN
+F 3 "~" H 3200 5100 50  0001 C CNN
+	1    3200 5100
+	0    1    1    0   
+$EndComp
+Text Label 3050 4500 2    50   ~ 0
+FocusSignal
+Text Label 3050 5100 2    50   ~ 0
+ShutterSignal
+$Comp
+L power:GND #PWR08
+U 1 1 5D542D11
+P 3350 4700
+F 0 "#PWR08" H 3350 4450 50  0001 C CNN
+F 1 "GND" V 3355 4572 50  0000 R CNN
+F 2 "" H 3350 4700 50  0001 C CNN
+F 3 "" H 3350 4700 50  0001 C CNN
+	1    3350 4700
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR09
+U 1 1 5D5433E6
+P 3350 5300
+F 0 "#PWR09" H 3350 5050 50  0001 C CNN
+F 1 "GND" V 3355 5172 50  0000 R CNN
+F 2 "" H 3350 5300 50  0001 C CNN
+F 3 "" H 3350 5300 50  0001 C CNN
+	1    3350 5300
+	0    1    1    0   
+$EndComp
+Text Label 5550 4700 2    50   ~ 0
+CameraGND
+Text Label 3950 4700 0    50   ~ 0
+CameraGND
+Text Label 3950 5300 0    50   ~ 0
+CameraGND
+Text Label 5550 4800 2    50   ~ 0
+CameraFocus
+Text Label 3950 4500 0    50   ~ 0
+CameraFocus
+Text Label 5550 4900 2    50   ~ 0
+CameraShutter
+Text Label 3950 5100 0    50   ~ 0
+CameraShutter
+Text Notes 2650 5800 0    50   ~ 0
+Note:\n1. Assume dual channel DIP8 Optocoupler\n2. Optocoupler yet to be chosen\n3. Resistor choice depends on max current of\n   optocoupler IR LED.
+NoConn ~ 7000 1400
 $EndSCHEMATC
