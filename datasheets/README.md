@@ -1,5 +1,18 @@
 # References
 
+## Summary Requirements
+
+1. 12v DC input
+1. 2.1a USB A port to power an external device
+1. 1.2a USB A port, controlled via a FET, to power warming strap
+1. Temperature sensor to sense/throttle lens warmer
+1. Four push buttons: OK, Cancel, Up, Down
+1. Slider or toggle switch that enables/disable display & controls
+1. Integrated direction sensor to find poles
+1. Integrated intervalometer 
+1. TMC2130 stepper driver
+1. 12v dc stepper motor
+
 ## Lens warming strap
 
 COOWOO Upgraded Lens Warmer/Heater Dew Heater Strip for Universal SLR Camera Lens and Telescopes
@@ -16,6 +29,22 @@ Heater material: Carbon fiber heating coil
 Power Consumption: 5V 0.8A 4W
 USB cord length: 59in
 Velcro length: 4.72in
+
+## Mosfets
+
+On-hand:
+
+1x STP16NF06 
+60V 16A TO220
+GDS
+https://www.jaycar.com.au/stp16nf06-60v-16a-to220/p/ZT2277
+Vgs min=2V, max=4V
+
+4x FQP30N06L
+GDS
+32A, 60V, RDS(on) = 0.035Ω @VGS = 10 V
+https://cdn.sparkfun.com/datasheets/Components/General/FQP30N06L.pdf
+Vgs min=1.0, max=2.5
 
 ## USB Power Connectors
 
@@ -47,7 +76,7 @@ i2c bus
 
 SPI
 
-TMC2130 evaluation board.
+TMC2130 stepper.
 
 [Purchase page](https://www.aliexpress.com/item/32853263225.html?spm=a2g0s.9042311.0.0.27424c4drxUNUe).
 
@@ -68,6 +97,8 @@ Pins (top-to-bottom):
 * DIN (-> MOSI)
 * CS
 * CLK (-> SCK)
+
+https://tronixstuff.com/2013/10/11/tutorial-arduino-max7219-led-display-driver-ic/
 
 ## Buttons
 
@@ -95,3 +126,11 @@ https://hackaday.com/2016/01/24/five-bucks-three-parts-wifi-camera-remote/
 https://hackaday.com/wp-content/uploads/2016/01/schematic.png
 http://www.doc-diy.net/photo/eos_wired_remote/
 
+
+## Other things to incorporate?
+
+DFRobot SEN0137
+
+https://wiki.dfrobot.com/DHT22_Temperature_and_humidity_module_SKU_SEN0137
+
+https://core-electronics.com.au/dht22-temperature-and-humidity-sensor.html
