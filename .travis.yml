@@ -8,11 +8,11 @@ jobs:
   include:
   - stage: Build Docker Image
     name: Build for Archlinux
-    script: ./build-scripts/docker-build-and-release-archlinux.sh
+    script: "./build-scripts/docker-build-and-release-archlinux.sh"
   - stage: Build Binaries
     name: Build for ESP32
-    script: ./build-scripts/docker-build-binary.sh
+    script: "./build-scripts/docker-build-binary.sh"
 env:
   global:
   - DOCKER_USERNAME=cgspeck
-  - secure: dKYSPqNG/3mq35FUUwoCCxoR3f05Gdf6UjGRUooQDrpfDwRDKwWK3LW1MffOH22wmF+s+jC9l7UQodNvb9a86HFnECz38FaCrWQYl6YhQeyBh9FT64zZIVngIVJ3Yi5/ts7NDi0Ja6TB+JvFxoBboClOZVXReFAQa70G5dk6sAWDdir2lEy/54yzNE0Ivws/RuYDWaLGT+728gnCXIfBZHJ8ZdzrQCYIzWAhWJtR7qUimppUIvg6S3rTOZSOhiG+14mDiMe45E69VSiHZWaqqkXqeB3RaK9V6pk+B7t4Uo1F0r9JXmfZMfaj/xz2AggYcFUcOJ1s/fX8Baj8Rtb9H87g2HfFlV5wHgp8e9V+8Dho6CIrPp4LBlq091QzpZmOEiwsI4C7Za4PskRj48UUjNBrFw3Idpyi+S0n7bYrWiaEhvZm1XZlGbCr+acW3WOzAKSWIuNvuA5QJ8ygWZ3fFk32MaAZavh7V2WmFsmS2Bg9lBujyNCElw8Klkrs9On5pijARZZJKuuQ07Wn8US0OdNsuRdq+JRSDFLcJSAz6xidmSiaeZ7KmkLA6/pWLLTdL6zMJbrx1BYZads3u7HN35JBpTqGRrqlZR5lk7/Yybiw7/udhx9kz8kxJulJxbdU1Ul1AIh73fHqMIhSFSHkTK+zu14GIA1Pf7Fut8gUI7s=
+  - secure: cLNoziaomVIPz0gqoRHTP/8KHQvCD4uPrNKkx324/EzrIHEnSjW6tnEE2kbA7qp3gB44Dp3Hoc29s0ov8Yj887h7kFTsN5yCtlOEDBlnGgIEYSJUTZOxfWNAXvFINUEAjIJnaS1KeHc1fdYZtujTnJsP4d8jY7POdRzKS4F9ik8bZnDbC0zyg2nSJi70oAtnG7i6DuKesDlBozpofd9rdISJt4iZvZx4ZKXfhxGStCXYqeSH7sKCf5BAyH+NLzP9zI13OiuFK8HVgZfq6s7NZQ1AiNWUj8mvngEkYVFxws98OozL5U7Cyxoyp5ZLJIgr2qOjwcdlTgxgCNhkfzDz/ekhC0KqAJBSexmTHw1+6mOeKHTDQnDOSKVBkfoAqu2QGxeMPTv8lcr92O4TAFvRQ77w0jVS6MHEj3n1HyXthFs+L3QVdsDSjMmmyuYbJL8CU354KlMozJgjBvt0edv20s8XSmjkIohqqo/nE5CZGph0h0e57ZEghrOb9RP2fPaUniE8D6DL5Z7elXr9DzxcScDaCso92M5b9a9WxgVaHCSnZuL2oXCGE/IfGKKx9iNQBP3IGkGNqV5v52gKr/B9unJz+/SzmVCJ1SySBlwcP+Yny76u60TBA5KHAd82EIFutPDInotDvsIrXuvoCgh8KuKe4mKsYdGb5O4JGigGdcY=
