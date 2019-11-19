@@ -15,6 +15,5 @@ echo "Pulling image"
 docker pull $IMG_NAME
 echo "Running container"
 docker run \
-  -it \
   --rm \
   $IMG_NAME

@@ -11,6 +11,7 @@ RUN pacman -Sy && pacman -S -y --noconfirm --needed \
     base-devel \
     go \
     git \
+    neovim \
     arduino-avr-core \
     esptool
 
@@ -28,5 +29,12 @@ RUN makepkg -si --noconfirm
 RUN yay -Sy && yay -S -y --noconfirm --needed \
     arduino-mk
 
+WORKDIR /app/barndoor-tracker/esp32/tools
+RUN python get.py
+
+RUN echo "Build the demo app..."
+WORKDIR /app/barndoor-tracker/makeEspArduino
+RUN make -f makeEspArduino.mk ESP_ROOT=/app/barndoor-tracker/esp32 CHIP=esp32 DEMO=1
+
 WORKDIR /app/barndoor-tracker
-CMD /app/barndoor-tracker/build-scripts/build.sh
+CMD make
