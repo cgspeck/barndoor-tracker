@@ -1,8 +1,8 @@
+CHIP=esp32
+ESP_ROOT = ./esp32
 ESP_LIBS = $(ESP_ROOT)/libraries
 
-LIBS=./src \
-	./libraries \
-	$(ESP_LIBS)/EEPROM
+CUSTOM_LIBS=./libraries
 
 SKETCH=src/main.ino
 

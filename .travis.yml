@@ -1,0 +1,18 @@
+language: c++
+dist: bionic
+os: linux
+services:
+- docker
+if: tag IS blank
+jobs:
+  include:
+  - stage: Build Docker Image
+    name: Build for Archlinux
+    script: "./build-scripts/docker-build-and-release-archlinux.sh"
+  - stage: Build Binaries
+    name: Build for ESP32
+    script: "./build-scripts/docker-build-binary.sh"
+env:
+  global:
+  - DOCKER_USERNAME=cgspeck
+  - secure: cLNoziaomVIPz0gqoRHTP/8KHQvCD4uPrNKkx324/EzrIHEnSjW6tnEE2kbA7qp3gB44Dp3Hoc29s0ov8Yj887h7kFTsN5yCtlOEDBlnGgIEYSJUTZOxfWNAXvFINUEAjIJnaS1KeHc1fdYZtujTnJsP4d8jY7POdRzKS4F9ik8bZnDbC0zyg2nSJi70oAtnG7i6DuKesDlBozpofd9rdISJt4iZvZx4ZKXfhxGStCXYqeSH7sKCf5BAyH+NLzP9zI13OiuFK8HVgZfq6s7NZQ1AiNWUj8mvngEkYVFxws98OozL5U7Cyxoyp5ZLJIgr2qOjwcdlTgxgCNhkfzDz/ekhC0KqAJBSexmTHw1+6mOeKHTDQnDOSKVBkfoAqu2QGxeMPTv8lcr92O4TAFvRQ77w0jVS6MHEj3n1HyXthFs+L3QVdsDSjMmmyuYbJL8CU354KlMozJgjBvt0edv20s8XSmjkIohqqo/nE5CZGph0h0e57ZEghrOb9RP2fPaUniE8D6DL5Z7elXr9DzxcScDaCso92M5b9a9WxgVaHCSnZuL2oXCGE/IfGKKx9iNQBP3IGkGNqV5v52gKr/B9unJz+/SzmVCJ1SySBlwcP+Yny76u60TBA5KHAd82EIFutPDInotDvsIrXuvoCgh8KuKe4mKsYdGb5O4JGigGdcY=
