@@ -20,7 +20,7 @@ IMG_NAME="cgspeck/barndoor-tracker:${TRAVIS_BUILD_NUMBER}"
 echo "Creating Docker Tag: ${IMG_NAME}"
 docker tag cgspeck/barndoor-tracker:latest $IMG_NAME
 
-if [[ "$TRAVIS" == "true" && "$BRANCH_NAME" == "develop" ]]; then
+if [[ "$TRAVIS" == "true" ]]; then
   echo -e "\nPushing new docker image: cgspeck/barndoor-tracker:latest"
   docker push cgspeck/barndoor-tracker:latest
   echo -e "\nPushing new docker image: $IMG_NAME"
