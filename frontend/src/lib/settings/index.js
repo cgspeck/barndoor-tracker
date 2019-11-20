@@ -1,8 +1,14 @@
+import axios from 'axios';
 import config from '../../config';
 
 async function getAllSettings() {
-  const response = await fetch(`http://localhost:${config.port}/settings?q=debug`);
-  return await response.json();
+  return axios.get(`http://localhost:${config.port}/settings?q=debug`)
+    .then(r => r.data);
 }
 
-export { getAllSettings };
+async function getFlags() {
+  return axios.get(`http://localhost:${config.port}/flags`)
+    .then(r => r.data);
+}
+
+export { getAllSettings, getFlags };
