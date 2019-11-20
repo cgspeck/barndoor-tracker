@@ -1,8 +1,17 @@
 - request:
-    url: /settings
+    url: /settings/debug
     method: GET
   response:
     - status: 200
       file: responses/settings_debug.json
+      headers:
+        Content-Type: application/json
+
+- request:
+    url: /settings/ap
+    method: GET
+  response:
+    - status: 200
+      file: responses/settings_ap.json
       headers:
         Content-Type: application/json

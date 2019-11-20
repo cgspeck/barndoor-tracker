@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { getAllSettings, getFlags } from '../../src/lib/settings';
+import { getAllSettings, getAPSettings, getFlags } from '../../src/lib/settings';
 import Axios from 'axios';
 
 import config from '../../src/config';
@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('getAllSettings', () => {
   beforeEach(() => {
-    mock.onGet(`http://localhost:${config.port}/settings?q=debug`).reply(200, {
+    mock.onGet(`http://localhost:${config.port}/settings/debug`).reply(200, {
       apSettings: {
         ssid: "foo",
         key: "bar",
@@ -30,6 +30,24 @@ describe('getAllSettings', () => {
     });
   });
 });
+
+describe('getAPSettings', () => {
+  beforeEach(() => {
+    mock.onGet(`http://localhost:${config.port}/settings/ap`).reply(200, {
+      ssid: "foo",
+      key: "bar",
+    });
+  })
+
+  it('returns expected value', async () => {
+    const res = await getAPSettings();
+    expect(res).toEqual({
+      ssid: "foo",
+      key: "bar",
+    });
+  });
+});
+
 
 describe('getFlags', () => {
   beforeEach(() => {

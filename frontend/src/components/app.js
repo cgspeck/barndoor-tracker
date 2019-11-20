@@ -6,6 +6,7 @@ import Header from './header';
 // Code-splitting is automated for routes
 import Debug from '../routes/debug';
 import Home from '../routes/home';
+import APSettings from '../routes/ap_settings';
 
 export default class App extends Component {
 	/** Gets fired when the route changes.
@@ -23,6 +24,7 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<Debug path="/debug" />
 					<Home path="/" />
+					<APSettings path="/ap_settings" />
 				</Router>
 			</div>
 		);
