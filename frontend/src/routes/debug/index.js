@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import style from './style';
+import { getAllSettings } from '../../lib/settings';
 
 export default class Debug extends Component {
 	state = {
@@ -10,21 +11,7 @@ export default class Debug extends Component {
 	}
 
 	async componentDidMount() {
-		this.getAllSettings().then(r => this.setState({...r}));
-	}
-
-	getAllMockSettings() {
-		return({
-			apSettings: {
-				ssid: 'not set',
-				key: 'not set'
-			}
-		})
-	}
-
-	async getAllSettings() {
-		const response = await fetch('http://localhost:8882/settings?q=debug');
-		return await response.json();
+		getAllSettings().then(r => this.setState({...r}));
 	}
 
 	render({}, { apSettings }) {
