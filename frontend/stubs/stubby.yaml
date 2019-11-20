@@ -9,7 +9,7 @@
 
 - request:
     url: /settings/ap
-    method: GET
+    method: [GET, POST]
   response:
     - status: 200
       file: responses/settings_ap.json
