@@ -12,6 +12,8 @@ RUN pacman -Sy && pacman -S -y --noconfirm --needed \
     go \
     git \
     neovim \
+    nodejs \
+    npm \
     arduino-avr-core \
     esptool
 
@@ -35,6 +37,12 @@ RUN python get.py
 RUN echo "Build the demo app..."
 WORKDIR /app/barndoor-tracker/makeEspArduino
 RUN make -f makeEspArduino.mk ESP_ROOT=/app/barndoor-tracker/esp32 CHIP=esp32 DEMO=1
+
+RUN echo "Buid the frontend..."
+WORKDIR /app/barndoor-tracker/frontend
+RUN npm i
+RUN npm run test
+RUN npm run build
 
 WORKDIR /app/barndoor-tracker
 CMD make
