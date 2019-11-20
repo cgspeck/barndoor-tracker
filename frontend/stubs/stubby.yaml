@@ -1,0 +1,8 @@
+- request:
+    url: /settings
+    method: GET
+  response:
+    - status: 200
+      file: responses/settings_debug.json
+      headers:
+        Content-Type: application/json
