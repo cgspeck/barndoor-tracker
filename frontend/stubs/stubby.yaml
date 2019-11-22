@@ -15,3 +15,12 @@
       file: responses/settings_ap.json
       headers:
         Content-Type: application/json
+
+-  request:
+      url: ^/settings/ap$
+      method: OPTIONS
+   response:
+      status: 204
+      headers:
+         content-type: application/json
+         Allow: OPTIONS, GET, POST
