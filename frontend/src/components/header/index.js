@@ -1,22 +1,70 @@
-import { h } from 'preact';
-import { Link } from 'preact-router/match';
-import style from './style.css';
+import { h, Component } from 'preact';
+import { route } from 'preact-router';
+import TopAppBar from 'preact-material-components/TopAppBar';
+import Drawer from 'preact-material-components/Drawer';
+import 'preact-material-components/Drawer/style.css';
+import 'preact-material-components/Dialog/style.css';
+import 'preact-material-components/List/style.css';
+import 'preact-material-components/TopAppBar/style.css';
 
-const DebugLink = () => {
-	if (process.env.NODE_ENV === 'development') {
-		return <Link activeClassName={style.active} href="/debug">Debug</Link>
+export default class Header extends Component {
+	closeDrawer() {
+		this.drawer.MDComponent.open = false;
+	}
+
+	openDrawer = () => (this.drawer.MDComponent.open = true);
+
+	drawerRef = drawer => (this.drawer = drawer);
+
+	debugLink = (selectedRoute, goDebug) => {
+		if (process.env.NODE_ENV === 'development') {
+			return (
+				<Drawer.DrawerItem selected={selectedRoute == '/debug'} onClick={goDebug}>
+					Debug
+				</Drawer.DrawerItem>
+			)
+		}
+	}
+
+	linkTo = path => () => {
+		route(path);
+		this.closeDrawer();
+	};
+
+	goAPSettings = this.linkTo('/ap_settings');
+	goDebug = this.linkTo('/debug');
+	goHome = this.linkTo('/');
+
+	render({selectedRoute}, {}) {
+		return (
+			<div>
+				<TopAppBar className="topappbar">
+					<TopAppBar.Row>
+						<TopAppBar.Section align-start>
+							<TopAppBar.Icon menu onClick={this.openDrawer}>
+								menu
+							</TopAppBar.Icon>
+							<TopAppBar.Title>Barndoor Tracker</TopAppBar.Title>
+						</TopAppBar.Section>
+					</TopAppBar.Row>
+				</TopAppBar>
+
+				<Drawer modal ref={this.drawerRef}>
+					<Drawer.DrawerContent>
+						<Drawer.DrawerItem selected={selectedRoute == '/'} onClick={this.goHome}>
+							{/*<List.ItemGraphic>home</List.ItemGraphic> */}
+							Home
+						</Drawer.DrawerItem>
+
+						<Drawer.DrawerItem selected={selectedRoute == '/ap_settings'} onClick={this.goAPSettings}>
+							AP Settings
+						</Drawer.DrawerItem>
+						{
+							this.debugLink(selectedRoute, this.goDebug)
+						}
+					</Drawer.DrawerContent>
+				</Drawer>
+			</div>
+		)
 	}
 }
-
-const Header = () => (
-	<header class={style.header}>
-		<h1>Barndoor Tracker</h1>
-		<nav>
-			<Link activeClassName={style.active} href="/">Home</Link>
-			<Link activeClassName={style.active} href="/ap_settings">AP Settings</Link>
-			<DebugLink/>
-		</nav>
-	</header>
-);
-
-export default Header;

@@ -7,11 +7,12 @@
     "start": "per-env",
     "start:production": "npm run -s serve",
     "start:development": "npm run -s dev",
-    "build": "preact build",
+    "build": "preact build --no-prerender",
     "serve": "preact build && serve build --single",
     "dev": "preact watch",
     "lint": "eslint src",
-    "test": "jest"
+    "test": "jest",
+    "stubby": "stubby -w -d ./stubs/stubby.yaml"
   },
   "eslintConfig": {
     "extends": "eslint-config-synacor"
@@ -37,6 +38,8 @@
   "dependencies": {
     "axios": "^0.19.0",
     "preact": "^10.0.1",
+    "preact-compat": "^3.19.0",
+    "preact-material-components": "^1.6.1",
     "preact-render-to-string": "^5.1.0",
     "preact-router": "^3.0.0"
   },
