@@ -1,5 +1,12 @@
 import { h, Component } from 'preact';
+import linkState from 'linkstate';
+
+import Button from 'preact-material-components/Button';
+import TextField from 'preact-material-components/TextField';
+import 'preact-material-components/Button/style.css';
+import 'preact-material-components/TextField/style.css';
 import style from './style';
+
 import { getAPSettings, setAPSettings } from '../../lib/settings';
 
 export default class APSettings extends Component {
@@ -32,23 +39,6 @@ export default class APSettings extends Component {
 			.catch(e => this.handleError(e));
   }
 
-  onSSIDInput = e => {
-    const { value } = e.target;
-		this.setState({ apSettings: {
-			key: this.state.apSettings.key,
-			ssid: value
-		} });
-	}
-
-	onKeyInput = e => {
-    const { value } = e.target;
-		this.setState({
-			apSettings: {
-				key: value,
-				ssid: this.state.apSettings.ssid
-		} });
-  }
-
 	errorToast() {
 		if (this.state.error != null) {
 			return(
@@ -76,9 +66,13 @@ export default class APSettings extends Component {
 				{this.infoToast()}
 				{this.errorToast()}
 				<form onSubmit={this.onSubmit.bind(this)}>
-					<p>SSID: <input type="text" value={apSettings.ssid} onInput={this.onSSIDInput.bind(this)}/></p>
-					<p>Key: <input type="text" value={apSettings.key} onInput={this.onKeyInput.bind(this)}/></p>
-					<button type="submit">Update</button>
+					<p>
+						<TextField label="SSID" value={apSettings.ssid} onInput={linkState(this, 'apSettings.ssid')}></TextField>
+					</p>
+					<p>
+						<TextField label="Key" value={apSettings.key} onInput={linkState(this, 'apSettings.key')}></TextField>
+					</p>
+					<Button raised ripple onClick={this.onSubmit.bind(this)}>Update</Button>
 				</form>
 			</div>
 		)
