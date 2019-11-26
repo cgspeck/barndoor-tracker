@@ -45,8 +45,7 @@ RUN npm run test
 RUN npm run docker:build
 
 RUN echo "Front-end build size"
-# WORKDIR /app/barndoor-tracker
-# RUN du -hs src/data
+RUN du -hs /app/barndoor-tracker/src/data
 
 WORKDIR /app/barndoor-tracker
 CMD make
