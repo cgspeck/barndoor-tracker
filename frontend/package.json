@@ -50,6 +50,9 @@
     "setupFiles": [
       "<rootDir>/tests/__mocks__/browserMocks.js",
       "<rootDir>/tests/__mocks__/setupTests.js"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!@material)"
     ]
   }
 }
