@@ -21,18 +21,18 @@ export default class App extends Component {
 	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
 	 *	@param {string} event.url	The newly routed URL
 	 */
-	flagsAreFalseOrNull() {
+	flagsAreTrueOrNull() {
 		const { needsAPSettings, needsLocationSettings } = this.state.flags;
 
-		return (needsAPSettings === null || needsAPSettings === false)
-			|| (needsLocationSettings === null || needsAPSettings === false);
+		return (needsAPSettings === null || needsAPSettings === true)
+			|| (needsLocationSettings === null || needsAPSettings === true);
 	}
 
 	async handleRoute(e) {
 		var flags;
 		var currentUrl;
 
-		if (this.flagsAreFalseOrNull) {
+		if (this.flagsAreTrueOrNull) {
 			flags = await getFlags();
 			this.setState({ flags: { ...flags } });
 		} else {

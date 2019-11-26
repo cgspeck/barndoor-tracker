@@ -32,6 +32,7 @@ export default class Header extends Component {
 	};
 
 	goAPSettings = this.linkTo('/ap_settings');
+	goLocationSettings = this.linkTo('/location_settings');
 	goDebug = this.linkTo('/debug');
 	goHome = this.linkTo('/');
 
@@ -60,7 +61,7 @@ export default class Header extends Component {
 							AP Settings
 						</Drawer.DrawerItem>
 
-						<Drawer.DrawerItem selected={selectedRoute == '/location_settings'} onClick={this.goAPSettings}>
+						<Drawer.DrawerItem selected={selectedRoute == '/location_settings'} onClick={this.goLocationSettings}>
 							Location Settings
 						</Drawer.DrawerItem>
 						{
