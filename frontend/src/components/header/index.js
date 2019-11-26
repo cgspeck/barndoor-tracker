@@ -59,6 +59,10 @@ export default class Header extends Component {
 						<Drawer.DrawerItem selected={selectedRoute == '/ap_settings'} onClick={this.goAPSettings}>
 							AP Settings
 						</Drawer.DrawerItem>
+
+						<Drawer.DrawerItem selected={selectedRoute == '/location_settings'} onClick={this.goAPSettings}>
+							Location Settings
+						</Drawer.DrawerItem>
 						{
 							this.debugLink(selectedRoute, this.goDebug)
 						}

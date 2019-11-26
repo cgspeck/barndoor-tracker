@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { getAllSettings, getAPSettings, getFlags, setAPSettings } from '../../src/lib/settings';
+import { getAllSettings, getAPSettings, getFlags, getLocationSettings, setAPSettings, setLocationSettings } from '../../src/lib/settings';
 import Axios from 'axios';
 
 import config from '../../src/config';
@@ -64,6 +64,60 @@ describe('setAPSettings', () => {
     });
   });
 });
+
+describe('getLocationSettings', () => {
+  beforeEach(() => {
+    mock.onGet(`http://localhost:${config.port}/settings/location`).reply(200, {
+      "latitude": -37.74,
+      "magDeclination": 11.64,
+      "x_offset": 0,
+      "y_offset": 0,
+      "z_offset": 0
+    });
+  })
+
+  it('returns expected value', async () => {
+    const res = await getLocationSettings();
+    expect(res).toEqual({
+      "latitude": -37.74,
+      "magDeclination": 11.64,
+      "x_offset": 0,
+      "y_offset": 0,
+      "z_offset": 0
+    });
+  });
+});
+
+describe('setLocationSettings', () => {
+  beforeEach(() => {
+    mock.onPost(`http://localhost:${config.port}/settings/location`, {
+      "latitude": -37.74,
+      "magDeclination": 11.64,
+      "x_offset": 1,
+      "y_offset": 2,
+      "z_offset": 3
+    }).reply(200, {
+      "latitude": -37.74,
+      "magDeclination": 11.64,
+      "x_offset": 1,
+      "y_offset": 2,
+      "z_offset": 3
+    });
+  })
+
+  it('returns expected value', async () => {
+    const res = await setLocationSettings(-37.74, 11.64, 1, 2, 3);
+    expect(res).toEqual({
+      "latitude": -37.74,
+      "magDeclination": 11.64,
+      "x_offset": 1,
+      "y_offset": 2,
+      "z_offset": 3
+    });
+  });
+});
+
+
 
 describe('getFlags', () => {
   beforeEach(() => {

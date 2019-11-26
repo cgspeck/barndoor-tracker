@@ -8,6 +8,7 @@ import Header from './header';
 import Debug from '../routes/debug';
 import Home from '../routes/home';
 import APSettings from '../routes/ap_settings';
+import LocationSettings from '../routes/location_settings';
 
 export default class App extends Component {
 	state = {
@@ -65,6 +66,7 @@ export default class App extends Component {
 					<Debug path="/debug" />
 					<Home path="/" />
 					<APSettings path="/ap_settings" />
+					<LocationSettings path="/location_settings" />
 				</Router>
 			</div>
 		);
