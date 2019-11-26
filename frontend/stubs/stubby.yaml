@@ -16,11 +16,56 @@
       headers:
         Content-Type: application/json
 
--  request:
-      url: ^/settings/ap$
-      method: OPTIONS
-   response:
-      status: 204
+- request:
+    url: /flags
+    method: GET
+  response:
+    - status: 200
+      file: responses/flags.json
       headers:
-         content-type: application/json
-         Allow: OPTIONS, GET, POST
+        Content-Type: application/json
+
+- request:
+    url: /settings/location
+    method: [GET, POST]
+  response:
+    - status: 200
+      file: responses/settings_location.json
+      headers:
+        Content-Type: application/json
+
+- request:
+    url: /settings/location/x_offset
+    method: [POST]
+  response:
+    - status: 200
+      file: responses/settings_location.json
+      headers:
+        Content-Type: application/json
+
+- request:
+    url: /settings/location/y_offset
+    method: [POST]
+  response:
+    - status: 200
+      file: responses/settings_location.json
+      headers:
+        Content-Type: application/json
+
+- request:
+    url: /settings/location/z_offset
+    method: [POST]
+  response:
+    - status: 200
+      file: responses/settings_location.json
+      headers:
+        Content-Type: application/json
+
+# -  request:
+#       url: ^/settings/ap$
+#       method: OPTIONS
+#    response:
+#       status: 204
+#       headers:
+#          content-type: application/json
+#          Allow: OPTIONS, GET, POST

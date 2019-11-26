@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
-import { Router } from 'preact-router';
+import { Router, route } from 'preact-router';
+import { getFlags } from '../lib/settings';
 
 import Header from './header';
 
@@ -9,22 +10,58 @@ import Home from '../routes/home';
 import APSettings from '../routes/ap_settings';
 
 export default class App extends Component {
+	state = {
+		flags: {
+			needsAPSettings: null,
+			needsLocationSettings: null,
+		}
+	};
 	/** Gets fired when the route changes.
 	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
 	 *	@param {string} event.url	The newly routed URL
 	 */
-	handleRoute = e => {
+	flagsAreFalseOrNull() {
+		const { needsAPSettings, needsLocationSettings } = this.state.flags;
+
+		return (needsAPSettings === null || needsAPSettings === false)
+			|| (needsLocationSettings === null || needsAPSettings === false);
+	}
+
+	async handleRoute(e) {
+		var flags;
+		var currentUrl;
+
+		if (this.flagsAreFalseOrNull) {
+			flags = await getFlags();
+			this.setState({ flags: { ...flags } });
+		} else {
+			flags = this.state.flags;
+		}
+
+		if (e.url == '/debug'){
+			currentUrl = '/debug';
+		} else if (flags.needsAPSettings) {
+			currentUrl = '/ap_settings';
+		} else if (flags.needsLocationSettings) {
+			currentUrl = '/location_settings';
+		} else {
+			currentUrl = e.url;
+		}
+
+		if (currentUrl != e.url) {
+			route(currentUrl);
+		}
+
 		this.setState({
-			currentUrl: e.url
+			currentUrl: currentUrl
 		});
-		// this.currentUrl = e.url;
 	};
 
 	render() {
 		return (
 			<div id="app">
 				<Header selectedRoute={this.state.currentUrl} />
-				<Router onChange={this.handleRoute}>
+				<Router onChange={this.handleRoute.bind(this)}>
 					<Debug path="/debug" />
 					<Home path="/" />
 					<APSettings path="/ap_settings" />
