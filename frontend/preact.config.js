@@ -12,7 +12,7 @@ export default (config, env, helpers) => {
 		filename: `[contenthash].css`,
 		chunkFilename: `[contenthash].css`
 	}));
-	config.module.loaders.push({ test: /\.css$/, loader: ['mini-css-extract-plugin']});
+	// config.module.loaders.push({ test: /\.css$/, loader: ['mini-css-extract-plugin']});
 
 	/*module: {
     rules: [
