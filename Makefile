@@ -1,8 +1,10 @@
 CHIP=esp32
+BOARD=esp32
 ESP_ROOT = ./esp32
-ESP_LIBS = $(ESP_ROOT)/libraries
 
-CUSTOM_LIBS=./libraries
+LIBS = ./libraries/AsyncTCP \
+	./libraries/ESPAsyncWebServer \
+	$(ESP_LIBS)/EEPROM
 
 SKETCH=src/main.ino
 

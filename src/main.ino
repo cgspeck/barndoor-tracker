@@ -2,11 +2,14 @@
 
 #define REPORT_INTEVAL 1000
 
+#include <DNSServer.h>
+#include <WiFi.h>
+#include <AsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+
 #include "runnable.h"
-#include "state_machine.h"
 
 Runnable *Runnable::headRunnable = NULL;
-StateMachine stateMachine;
 
 void setup() {
   // put your setup code here, to run once:

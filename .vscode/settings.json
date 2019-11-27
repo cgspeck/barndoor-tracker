@@ -2,7 +2,8 @@
     "files.associations": {
         "*.tcc": "cpp",
         "string_view": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "functional": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
