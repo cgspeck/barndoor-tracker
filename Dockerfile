@@ -42,10 +42,10 @@ RUN echo "Buid the frontend..."
 WORKDIR /app/barndoor-tracker/frontend
 RUN npm i
 RUN npm run test
-RUN npm run docker:build
+RUN npm run build
 
 RUN echo "Front-end build size"
-RUN du -hs /app/barndoor-tracker/src/data
+RUN du -hs /app/barndoor-tracker/frontend/build
 
 WORKDIR /app/barndoor-tracker
 CMD make
