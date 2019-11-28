@@ -3,6 +3,7 @@ BOARD=esp32
 ESP_ROOT = ./esp32
 
 LIBS = ./libraries/AsyncTCP \
+	./libraries/ArduinoJson \
 	./libraries/ESPAsyncWebServer \
 	$(ESP_LIBS)/EEPROM \
 	$(ESP_LIBS)/WiFi \

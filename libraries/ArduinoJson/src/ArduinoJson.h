@@ -2,6 +2,8 @@
 // Copyright Benoit Blanchon 2014-2019
 // MIT License
 
+// version ArduinoJson-v6.13.0.h
+
 #pragma once
 
 #ifdef __cplusplus

@@ -10,12 +10,13 @@
 #include <SPIFFS.h>
 
 #include <ESPAsyncWebServer.h>
-
-#include "ArduinoJson-v6.13.0.h"
+#include <ArduinoJson.h>
 // #include "runnable.h"
+#include "settingsController.h"
 
 DNSServer dnsServer;
 AsyncWebServer server(80);
+SettingsController settingsController;
 
 // Runnable *Runnable::headRunnable = NULL;
 
@@ -56,10 +57,19 @@ void setup() {
   Serial.begin(115200);
   Serial.println("start setup!");
   SPIFFS.begin(true);
-  // put your setup code here, to run once:
-  WiFi.softAP("bd-tracker");
+  settingsController.setup();
+
+  if (settingsController.getKey() == "") {
+    // Open AP mode
+    WiFi.softAP(settingsController.getSSID());
+  } else {
+    WiFi.softAP(settingsController.getSSID(), settingsController.getKey());
+  }
+
   dnsServer.start(53, "*", WiFi.softAPIP());
   // server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+  // ADD ALL CUSTOM HANDLERS HERE!!
+  settingsController.attachHandlers(&server);
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
   // Runnable::setupAll();
   server.onNotFound(notFoundHandler);
@@ -69,8 +79,10 @@ void setup() {
 }
 
 void loop() {
+  unsigned long currentMillis = millis();
   // Serial.println("alive!");
   // put your main code here, to run repeatedly:
   dnsServer.processNextRequest();
+  settingsController.loop(currentMillis);
   // Runnable::loopAll();
 }
