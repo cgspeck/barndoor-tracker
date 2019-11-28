@@ -25,7 +25,6 @@ public:
   virtual ~CaptiveRequestHandler() {}
 
   bool canHandle(AsyncWebServerRequest *request){
-    //request->addInterestingHeader("ANY");
     return true;
   }
 
@@ -41,6 +40,13 @@ public:
 };
 
 void notFoundHandler(AsyncWebServerRequest *request){
+  if (request->method() == HTTP_OPTIONS) {
+    AsyncWebServerResponse *response = request->beginResponse(204);
+    response->addHeader("Allow", "OPTIONS, GET, POST");
+    request->send(response);
+  } else {
+    request->send(404);
+  }
   //Handle Unknown Request
   Serial.println("not found");
   request->send(404);
@@ -57,6 +63,7 @@ void setup() {
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
   // Runnable::setupAll();
   server.onNotFound(notFoundHandler);
+  DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.begin();
   Serial.println("end setup!");
 }
