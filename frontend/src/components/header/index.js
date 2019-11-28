@@ -16,16 +16,6 @@ export default class Header extends Component {
 
 	drawerRef = drawer => (this.drawer = drawer);
 
-	debugLink = (selectedRoute, goDebug) => {
-		if (process.env.NODE_ENV === 'development') {
-			return (
-				<Drawer.DrawerItem selected={selectedRoute == '/debug'} onClick={goDebug}>
-					Debug
-				</Drawer.DrawerItem>
-			)
-		}
-	}
-
 	linkTo = path => () => {
 		route(path);
 		this.closeDrawer();
@@ -64,9 +54,9 @@ export default class Header extends Component {
 						<Drawer.DrawerItem selected={selectedRoute == '/location_settings'} onClick={this.goLocationSettings}>
 							Location Settings
 						</Drawer.DrawerItem>
-						{
-							this.debugLink(selectedRoute, this.goDebug)
-						}
+						<Drawer.DrawerItem selected={selectedRoute == '/debug'} onClick={this.goDebug}>
+							Debug
+						</Drawer.DrawerItem>
 					</Drawer.DrawerContent>
 				</Drawer>
 			</div>
