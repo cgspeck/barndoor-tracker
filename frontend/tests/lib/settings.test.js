@@ -12,7 +12,7 @@ afterEach(() => {
 
 describe('getAllSettings', () => {
   beforeEach(() => {
-    mock.onGet(`http://localhost:${config.port}/settings/debug`).reply(200, {
+    mock.onGet(`${config.endpoint}/settings/debug`).reply(200, {
       apSettings: {
         ssid: "foo",
         key: "bar",
@@ -33,7 +33,7 @@ describe('getAllSettings', () => {
 
 describe('getAPSettings', () => {
   beforeEach(() => {
-    mock.onGet(`http://localhost:${config.port}/settings/ap`).reply(200, {
+    mock.onGet(`${config.endpoint}/settings/ap`).reply(200, {
       ssid: "foo",
       key: "bar",
     });
@@ -50,7 +50,7 @@ describe('getAPSettings', () => {
 
 describe('setAPSettings', () => {
   beforeEach(() => {
-    mock.onPost(`http://localhost:${config.port}/settings/ap`).reply(200, {
+    mock.onPost(`${config.endpoint}/settings/ap`).reply(200, {
       ssid: "foo2",
       key: "bar2",
     });
@@ -67,7 +67,7 @@ describe('setAPSettings', () => {
 
 describe('getLocationSettings', () => {
   beforeEach(() => {
-    mock.onGet(`http://localhost:${config.port}/settings/location`).reply(200, {
+    mock.onGet(`${config.endpoint}/settings/location`).reply(200, {
       "latitude": -37.74,
       "magDeclination": 11.64,
       "x_offset": 0,
@@ -90,7 +90,7 @@ describe('getLocationSettings', () => {
 
 describe('setLocationSettings', () => {
   beforeEach(() => {
-    mock.onPost(`http://localhost:${config.port}/settings/location`, {
+    mock.onPost(`${config.endpoint}/settings/location`, {
       "latitude": -37.74,
       "magDeclination": 11.64,
       "x_offset": 1,
@@ -121,7 +121,7 @@ describe('setLocationSettings', () => {
 
 describe('getFlags', () => {
   beforeEach(() => {
-    mock.onGet(`http://localhost:${config.port}/flags`).reply(200, {
+    mock.onGet(`${config.endpoint}/flags`).reply(200, {
       needsAPSettings: false,
       needsLocationSettings: true
     });
