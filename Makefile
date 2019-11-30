@@ -17,8 +17,9 @@ BUILD_DIR=./build
 
 FS_DIR=./frontend/build
 
-# ctrl + a, K, y to quit!
 monitor:
+	echo "\n\nCTRL + a, K, y to quit!\n\n"
+	/bin/bash -c 'read -n 1 -s -r -p "Press any key to start..."'
 	screen ${UPLOAD_PORT} ${UPLOAD_SPEED}
 
 include ./makeEspArduino/makeEspArduino.mk
