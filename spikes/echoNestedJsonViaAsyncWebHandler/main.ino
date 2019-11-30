@@ -68,13 +68,43 @@ private:
     request->send(response);
   };
 
-  void _handleSettingsPost(AsyncWebServerRequest * request, AsyncResponseStream *response) {
+  void _handleSettingsPost(AsyncWebServerRequest * request, AsyncResponseStream *response, uint8_t *data, size_t total) {
+    /*
+    This just has to be concerned with updating device state & emitting errors, if any!
 
+    test string:
+        const char* jsonChar = "{\"message\":\"foo message\",\"value\":123456}";
+
+    */
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 30;
+    DynamicJsonDocument doc(capacity);
+
+    DeserializationError error = deserializeJson(doc, data);
+
+    if(error) {
+      Serial.print("bad json: ");
+      Serial.println(error.c_str());
+      request->send(total > capacity ? 413 : 400);
+      return;
+    }
+
+    const char* message = doc["message"];
+    if (message) {
+      Serial.print("rcd message:");
+      Serial.println(message);
+      _message = message;
+    }
+
+    if(doc.containsKey("value")) {  // need to check for presence of key where value may be 0 / Null
+      long value = doc["value"];
+      Serial.print("rcd value:");
+      Serial.println(value);
+      _value = value;
+    }
   };
 
   void _constructSettingsDoc(JsonObject *settingsObj) {
     settingsObj->operator[]("message") = _message;
-    Serial.println(_value);
     settingsObj->operator[]("value") = _value;
   }
 
@@ -98,19 +128,27 @@ public:
   }
 
   void handleRequest(AsyncWebServerRequest *request) {
+    Serial.println("Hit handleRequest");
     // create a response with content-type header set
     AsyncResponseStream *response = request->beginResponseStream("application/json");
 
     if (request->url() == "/debug") {
       _handleDebugGet(request, response);
     } else if (request->url() == "/settings") {
-      if (request->method() == HTTP_GET) {
-        _handleSettingsGet(request, response);
-      } else {
-        _handleSettingsPost(request, response);
-      }
+      _handleSettingsGet(request, response);
     }
   }
+
+  void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    Serial.println("Hit handleBody");
+    if (!(request->url() == "/settings" && request->method() == HTTP_POST)) {
+      Serial.println("Early body return");
+      return;
+    }
+
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    _handleSettingsPost(request, response, data, total);
+  };
 };
 
 SettingsRequestHandler settingsRequestHandler;

@@ -10,7 +10,7 @@ LIBS = ../../libraries/ArduinoJson \
 	$(ESP_LIBS)/DNSServer
 
 monitor:
-	echo "\n\nCTRL + a, K, y to quit!\n\n"
+	echo "\n\nCTRL + a, k, y to quit!\n\n"
 	/bin/bash -c 'read -n 1 -s -r -p "Press any key to start..."'
 	screen ${UPLOAD_PORT} ${UPLOAD_SPEED}
 
