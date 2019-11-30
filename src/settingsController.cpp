@@ -9,59 +9,187 @@
 SettingsController::SettingsController() {};
 
 void SettingsController::setup() {
-    // TODO: check flash ram and load defaults if schema is not up to date or missing
+    _loadConfiguration(filename, config);
 };
 
-void SettingsController::loop(unsigned long currentMillis) {};
+void SettingsController::_loadConfiguration(const char *filename, Config &config) {
+    // Open file for reading
+    File file = SPIFFS.open(filename);
 
-void SettingsController::attachHandlers(AsyncWebServer *server) {
-    server->on("/settings/debug", HTTP_GET, std::bind(&SettingsController::handleDebugRequest, this, std::placeholders::_1));
-    server->on("/flags", HTTP_GET, std::bind(&SettingsController::handleFlagRequest, this, std::placeholders::_1));
+    // Allocate a temporary JsonDocument
+    // Don't forget to change the capacity to match your requirements.
+    // Use arduinojson.org/v6/assistant to compute the capacity.
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
+    StaticJsonDocument<capacity> doc;
+    // Deserialize the JSON document
+    DeserializationError error = deserializeJson(doc, file);
+    bool writeDefaults = false;
 
-    // AP Settings
-    server->on("/settings/ap", HTTP_GET, std::bind(&SettingsController::handleAPSettingsRequest, this, std::placeholders::_1));
+    if (error) {
+        Serial.println(F("Failed to read file, using default configuration"));
+        writeDefaults = true;
+    }
 
-    server->on("/settings/ap", HTTP_POST, std::bind(&SettingsController::handleAPSettingsPost, this, std::placeholders::_1));
+    // Copy values from the JsonDocument to the Config
+    const char* ssid = doc["ssid"] | "barndoor_tracker";
+    strlcpy(
+        config.ssid,
+        ssid,
+        sizeof(config.ssid)
+    );
+
+
+    const char* key = doc["key"] | "";
+    strlcpy(
+        config.key,
+        key,
+        sizeof(config.key)
+    );
+    file.close();
+
+    if (writeDefaults) {
+        _saveConfiguration(filename, config);
+    }
 };
 
-void SettingsController::setDefaults() {};
+void SettingsController::_saveConfiguration(const char *filename, Config &config) {
+    Serial.print("Saving ");
+    Serial.println(filename);
+    SPIFFS.remove(filename);
+
+    // Open file for writing
+    File file = SPIFFS.open(filename, FILE_WRITE);
+    if (!file) {
+        Serial.println(F("Failed to create file"));
+        return;
+    }
+
+    // Allocate a temporary JsonDocument
+    // Don't forget to change the capacity to match your requirements.
+    // Use arduinojson.org/assistant to compute the capacity.
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
+    StaticJsonDocument<256> doc;
+
+    // Set the values in the document
+    doc["ssid"] = config.ssid;
+    doc["key"] = config.key;
+
+    // Serialize JSON to file
+    if (serializeJson(doc, file) == 0) {
+        Serial.println(F("Failed to write to file"));
+    }
+
+    // Close the file
+    file.close();
+}
+
+void SettingsController::loop(unsigned long currentMillis) {
+    _currentMillis = currentMillis;
+    if (REBOOT_REQUESTED && (unsigned long)(currentMillis - REBOOT_REQUESTED_AT) >= (int)REBOOT_DELAY_MILLIS) {
+        Serial.println("Rebooting");
+        ESP.restart();
+    }
+};
+
+void SettingsController::setDefaults() {
+    // delete the config.json file
+    Serial.print("Deleting ");
+    Serial.println(filename);
+    SPIFFS.remove(filename);
+    Serial.println(filename);
+    // set flag to call for delay restart
+    Serial.print("Scheduling reboot in ");
+    Serial.print(REBOOT_DELAY_MILLIS / 5000);
+    Serial.println(" seconds.");
+    REBOOT_REQUESTED_AT = _currentMillis;
+    REBOOT_REQUESTED = true;
+};
 
 bool SettingsController::needsReboot() { return false; };
 
-DynamicJsonDocument SettingsController::_createAPSettingsDoc() {
-    const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2);
-    DynamicJsonDocument doc(capacity);
-    JsonObject apSettings = doc.createNestedObject("apSettings");
-    apSettings["ssid"] = getSSID();
-    apSettings["key"] = getKey();
-    return apSettings;
-}
-
-AsyncCallbackJsonWebHandler SettingsController::handleFlagRequest(AsyncWebServerRequest *request) {
-    AsyncResponseStream *response = request->beginResponseStream("application/json");
+void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
     const size_t capacity = JSON_OBJECT_SIZE(2);
     DynamicJsonDocument doc(capacity);
-    doc["needsAPSettings"] = true;
+    doc["needsAPSettings"] = (strlen(config.key)  == 0);
     doc["needsLocationSettings"] = true;
     serializeJson(doc, *response);
     request->send(response);
 }
 
-AsyncCallbackJsonWebHandler SettingsController::handleDebugRequest(AsyncWebServerRequest *request) {}
+bool SettingsController::canHandle(AsyncWebServerRequest *request) {
+    bool _canHandle = false;
+    if (request->url() == "/debug" && request->method() == HTTP_GET) {
+        _canHandle = true;
+    } else if (request->url() == "/settings/ap" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST))) {
+        _canHandle = true;
+    } else if (request->url() == "/flags" && request->method() == HTTP_GET) {
+        _canHandle = true;
+    }
 
-AsyncCallbackJsonWebHandler SettingsController::handleAPSettingsRequest(AsyncWebServerRequest *request) {};
+    return _canHandle;
+}
 
-AsyncCallbackJsonWebHandler SettingsController::handleAPSettingsPost(AsyncWebServerRequest *request) {
-    // JsonObject& jsonObj = json.as<JsonObject>();
+void SettingsController::handleRequest(AsyncWebServerRequest *request) {
+    // create a response with content-type header set
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+
+    if (request->url() == "/flags") {
+        _handleFlagRequest(request, response);
+    } else if (request->url() == "/debug") {
+        _handleDebugRequest(request, response);
+    } else if (request->url() == "/settings/ap") {
+        _handleAPSettingsRequest(request, response);
+    }
+  }
+
+/*
+{
+"ap_settings": {
+  "ssid": "1234567980123456798012345679801234567980123456798012345679801234",
+  "key": "1234567980123456798012345679801234567980123456798012345679801234"
+    }
+}
+*/
+void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 170;
+    DynamicJsonDocument doc(capacity);
+    JsonObject ap_settings = doc.createNestedObject("ap_settings");
+    _constructAPSettingsDoc(&ap_settings);
+
+    serializeJson(doc, *response);
+    request->send(response);
+}
+
+/*
+{
+    "ssid": "1234567980123456798012345679801234567980123456798012345679801234",
+    "key": "1234567980123456798012345679801234567980123456798012345679801234"
+}
+*/
+void SettingsController::_handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
+    DynamicJsonDocument doc(capacity);
+    JsonObject root = doc.to<JsonObject>();
+    _constructAPSettingsDoc(&root);
+    serializeJson(doc, *response);
+    request->send(response);
 };
+
+void SettingsController::_constructAPSettingsDoc(JsonObject *settingsObj) {
+    settingsObj->operator[]("ssid") = config.ssid;
+    settingsObj->operator[]("key") = config.key;
+}
+
+
+void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, AsyncResponseStream *response, uint8_t *data, size_t total) {};
 
 
 const char * SettingsController::getSSID() {
-    return "bd_tracker";
+    return config.ssid;
 };
 
 const char * SettingsController::getKey() {
-    return "";
+    return config.key;
 };
 
 

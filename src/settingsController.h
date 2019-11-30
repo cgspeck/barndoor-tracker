@@ -3,22 +3,43 @@
 
 // #include <EEPROM.h>  - use "Preferences" instead
 
+#include <SPIFFS.h>
 #include <ArduinoJson.h>
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
-class SettingsController {
-    static const int SCHEMA_VER = 1;
+#define REBOOT_DELAY_MILLIS 5000
 
-    // I think these addresses refer to byte positions within the EEPROM
-    static const int SCHEMA_ADDRESS = 0;  // int, 4 bytes
-    static const int AP_SET = 4; // bool, 1 byte
-    static const int AP_SSID = 5; // char? str?
-    // static const int LATITUDE_ADDRESS = 4;  // int, 4 bytes
-    // static const int MAGNETIC_DECLINATION_ADDRESS = 8;  // int, 4 bytes
-    DynamicJsonDocument _createAPSettingsDoc();
+class SettingsController : public AsyncWebHandler {
+  private:
+    struct Config {
+      char ssid[63];
+      char key[63];
+    };
+    Config config;
+    const char *filename = "/config.json";
+
+    unsigned long REBOOT_REQUESTED_AT;
+    bool REBOOT_REQUESTED = false;
+
+    unsigned long _currentMillis;
+
+    void _loadConfiguration(const char *filename, Config &config);
+    void _saveConfiguration(const char *filename, Config &config);
+
     const char * _validateSSID(char* val);
     const char * _validateKey(char* val);
+
+    // general flags and debug
+    void _handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
+    void _handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
+
+    // AP settings
+    void _handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
+    void _handleAPSettingsPost(AsyncWebServerRequest *request, AsyncResponseStream * response, uint8_t *data, size_t total);
+
+    // internal document construction
+    void _constructAPSettingsDoc(JsonObject *settingsObj);
 
   public:
     SettingsController();
@@ -26,18 +47,12 @@ class SettingsController {
     void setup();
     void loop(unsigned long currentMilLis);
 
-    void attachHandlers(AsyncWebServer *server);
-
     void setDefaults();
     bool needsReboot();
 
-    // general flags and debug
-    AsyncCallbackJsonWebHandler handleFlagRequest(AsyncWebServerRequest *request);
-    AsyncCallbackJsonWebHandler handleDebugRequest(AsyncWebServerRequest *request);
+    bool canHandle(AsyncWebServerRequest *request);
+    void handleRequest(AsyncWebServerRequest *request);
 
-    // AP settings
-    AsyncCallbackJsonWebHandler handleAPSettingsRequest(AsyncWebServerRequest *request);
-    AsyncCallbackJsonWebHandler handleAPSettingsPost(AsyncWebServerRequest *request);
     const char * getSSID();
     const char * getKey();
     bool setSSID(char* ssid);
