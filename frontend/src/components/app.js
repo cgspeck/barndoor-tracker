@@ -43,7 +43,7 @@ export default class App extends Component {
 			currentUrl = '/debug';
 		} else if (flags.needsAPSettings) {
 			currentUrl = '/ap_settings';
-		} else if (flags.needsLocationSettings) {
+    } else if (flags.needsLocationSettings && (!['/ap_settings', '/location_settings'].includes(e.url))) {
 			currentUrl = '/location_settings';
 		} else {
 			currentUrl = e.url;

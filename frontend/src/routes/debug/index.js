@@ -9,7 +9,7 @@ export default class Debug extends Component {
 			"key": null
 		},
 		"debug": {
-			"currentMilis": null
+			"currentMillis": null
 		},
 		"location": {
 			"latitude": null,
@@ -21,7 +21,10 @@ export default class Debug extends Component {
 	}
 
 	async componentDidMount() {
-		getAllSettings().then(r => this.setState({...r}));
+		getAllSettings().then(r => {
+			console.log('got response', r);
+			this.setState({...r})
+		});
 	}
 
 	render({}, { apSettings, debug, location }) {
@@ -29,7 +32,7 @@ export default class Debug extends Component {
 			<div class={style.debug}>
 				<h1>Debug</h1>
 				<p>NODE_ENV: {JSON.stringify(process.env.NODE_ENV)}</p>
-				<p>currentMillis: {debug.currentMilis}</p>
+				<p>currentMillis: {debug.currentMillis}</p>
 				<h2>AP Settings</h2>
 				<p>SSID: {apSettings.ssid}</p>
 				<p>Key: {apSettings.key}</p>

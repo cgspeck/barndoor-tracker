@@ -36,7 +36,7 @@ class SettingsController : public AsyncWebHandler {
 
     // AP settings
     void _handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
-    void _handleAPSettingsPost(AsyncWebServerRequest *request, AsyncResponseStream * response, uint8_t *data, size_t total);
+    void _handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total);
 
     // internal document construction
     void _constructAPSettingsDoc(JsonObject *settingsObj);
@@ -48,15 +48,13 @@ class SettingsController : public AsyncWebHandler {
     void loop(unsigned long currentMilLis);
 
     void setDefaults();
-    bool needsReboot();
 
     bool canHandle(AsyncWebServerRequest *request);
     void handleRequest(AsyncWebServerRequest *request);
+    void handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 
     const char * getSSID();
     const char * getKey();
-    bool setSSID(char* ssid);
-    bool setKey(char* password);
 };
 
 #endif

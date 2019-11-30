@@ -105,8 +105,6 @@ void SettingsController::setDefaults() {
     REBOOT_REQUESTED = true;
 };
 
-bool SettingsController::needsReboot() { return false; };
-
 void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
     const size_t capacity = JSON_OBJECT_SIZE(2);
     DynamicJsonDocument doc(capacity);
@@ -143,16 +141,24 @@ void SettingsController::handleRequest(AsyncWebServerRequest *request) {
   }
 
 /*
-{
-"ap_settings": {
-  "ssid": "1234567980123456798012345679801234567980123456798012345679801234",
-  "key": "1234567980123456798012345679801234567980123456798012345679801234"
-    }
+   {
+   "debug": {
+       "currentMillis": 4294967295
+
+   },
+   "ap_settings": {
+     "ssid": "1234567980123456798012345679801234567980123456798012345679801234",
+       "key": "1234567980123456798012345679801234567980123456798012345679801234"
+   }
 }
 */
 void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
-    const size_t capacity = JSON_OBJECT_SIZE(2) + 170;
+    const size_t capacity = JSON_OBJECT_SIZE(1) + 2*JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
+
+    JsonObject debug = doc.createNestedObject("debug");
+    debug["currentMillis"] = _currentMillis;
+
     JsonObject ap_settings = doc.createNestedObject("apSettings");
     _constructAPSettingsDoc(&ap_settings);
 
@@ -181,8 +187,62 @@ void SettingsController::_constructAPSettingsDoc(JsonObject *settingsObj) {
 }
 
 
-void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, AsyncResponseStream *response, uint8_t *data, size_t total) {};
+void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    if (request->url() == "/settings/ap" && request->method() == HTTP_POST) {
+        _handleAPSettingsPost(request, data, total);
+    }
+}
+/*
+{
+    "ssid": "1234567980123456798012345679801234567980123456798012345679801234",
+    "key": "1234567980123456798012345679801234567980123456798012345679801234"
+}
+*/
+void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total) {
+    const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
+    DynamicJsonDocument doc(capacity);
 
+    DeserializationError error = deserializeJson(doc, data);
+
+    if(error) {
+      Serial.print("bad json: ");
+      Serial.println(error.c_str());
+      request->send(total > capacity ? 413 : 400);
+      return;
+    }
+    bool settingsChanged = false;
+
+    const char* ssid = doc["ssid"];
+    if (ssid && (strcmp(ssid, config.ssid) != 0)) {
+        Serial.print("rcd ssid:");
+        Serial.println(ssid);
+
+        strlcpy(
+            config.ssid,
+            ssid,
+            sizeof(config.ssid)
+        );
+        settingsChanged = true;
+    }
+
+    const char* key = doc["key"];
+    if (key && (strcmp(key, config.key) != 0)) {
+        Serial.print("rcd key:");
+        Serial.println(key);
+        strlcpy(
+            config.key,
+            key,
+            sizeof(config.key)
+        );
+        settingsChanged = true;
+    }
+
+    if (settingsChanged) {
+        _saveConfiguration(filename, config);
+        REBOOT_REQUESTED = true;
+        REBOOT_REQUESTED_AT = _currentMillis;
+    }
+};
 
 const char * SettingsController::getSSID() {
     return config.ssid;
@@ -191,15 +251,6 @@ const char * SettingsController::getSSID() {
 const char * SettingsController::getKey() {
     return config.key;
 };
-
-
-bool SettingsController::setSSID(char* ssid) {
-    return true;
-}
-
-bool SettingsController::setKey(char* key) {
-    return true;
-}
 
 /* rules for SSID & key
 
