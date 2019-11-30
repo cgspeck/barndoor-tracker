@@ -118,7 +118,7 @@ void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, Asyn
 
 bool SettingsController::canHandle(AsyncWebServerRequest *request) {
     bool _canHandle = false;
-    if (request->url() == "/debug" && request->method() == HTTP_GET) {
+    if (request->url() == "/settings/debug" && request->method() == HTTP_GET) {
         _canHandle = true;
     } else if (request->url() == "/settings/ap" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST))) {
         _canHandle = true;
@@ -135,7 +135,7 @@ void SettingsController::handleRequest(AsyncWebServerRequest *request) {
 
     if (request->url() == "/flags") {
         _handleFlagRequest(request, response);
-    } else if (request->url() == "/debug") {
+    } else if (request->url() == "/settings/debug") {
         _handleDebugRequest(request, response);
     } else if (request->url() == "/settings/ap") {
         _handleAPSettingsRequest(request, response);
@@ -153,7 +153,7 @@ void SettingsController::handleRequest(AsyncWebServerRequest *request) {
 void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
     const size_t capacity = JSON_OBJECT_SIZE(2) + 170;
     DynamicJsonDocument doc(capacity);
-    JsonObject ap_settings = doc.createNestedObject("ap_settings");
+    JsonObject ap_settings = doc.createNestedObject("apSettings");
     _constructAPSettingsDoc(&ap_settings);
 
     serializeJson(doc, *response);
