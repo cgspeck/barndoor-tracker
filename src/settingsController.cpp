@@ -87,7 +87,7 @@ void SettingsController::_saveConfiguration(const char *filename, Config &config
     // Allocate a temporary JsonDocument
     // Don't forget to change the capacity to match your requirements.
     // Use arduinojson.org/assistant to compute the capacity.
-    const size_t capacity = JSON_OBJECT_SIZE(8);
+    const size_t capacity = JSON_OBJECT_SIZE(8) + 230;
     DynamicJsonDocument doc(capacity);
 
     // Set the values in the document
@@ -206,7 +206,7 @@ void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *dat
 */
 void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
     Serial.println("SettingsController::_handleDebugRequest start");
-    const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(6);
+    const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(6) + 270;
     DynamicJsonDocument doc(capacity);
 
     JsonObject debug = doc.createNestedObject("debug");
@@ -345,22 +345,22 @@ void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *requ
     }
 
     if (doc.containsKey("magDeclination")) {
-        config.latitude = doc["magDeclination"];
+        config.magDeclination = doc["magDeclination"];
         settingsChanged = true;
     }
 
     if (doc.containsKey("x_offset")) {
-        config.latitude = doc["x_offset"];
+        config.x_offset = doc["x_offset"];
         settingsChanged = true;
     }
 
     if (doc.containsKey("y_offset")) {
-        config.latitude = doc["y_offset"];
+        config.y_offset = doc["y_offset"];
         settingsChanged = true;
     }
 
     if (doc.containsKey("z_offset")) {
-        config.latitude = doc["z_offset"];
+        config.z_offset = doc["z_offset"];
         settingsChanged = true;
     }
 
