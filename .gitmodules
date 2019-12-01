@@ -10,6 +10,3 @@
 [submodule "libraries/AsyncTCP"]
 	path = libraries/AsyncTCP
 	url = https://github.com/me-no-dev/AsyncTCP.git
-[submodule "tools/EspArduinoExceptionDecoder"]
-	path = tools/EspArduinoExceptionDecoder
-	url = https://github.com/janLo/EspArduinoExceptionDecoder.git
