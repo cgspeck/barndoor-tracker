@@ -11,6 +11,7 @@
     "magDeclination": 11.64,
     "x_offset": 0,
     "y_offset": 0,
-    "z_offset": 0
+    "z_offset": 0,
+    "locationSet": true
   }
 }
