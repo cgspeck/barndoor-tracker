@@ -27,31 +27,31 @@ void Persistence::checkSchema() {
 void Persistence::setDefaults() {
     Serial.println("Setting defaults");
     EEPROM.writeInt(SCHEMA_ADDRESS, SCHEMA_VER);
-    EEPROM.writeBool(LATITUDE_SET_ADDRESS, false);
-    EEPROM.writeInt(LATITUDE_ADDRESS, -3691);  // LAT of Heathcote, Victoria
+    // EEPROM.writeBool(LATITUDE_SET_ADDRESS, false);
+    // EEPROM.writeInt(LATITUDE_ADDRESS, -3691);  // LAT of Heathcote, Victoria
 }
 
 bool Persistence::isLatitudeSet() {
-    return EEPROM.readBool(LATITUDE_SET_ADDRESS);
+    // return EEPROM.readBool(LATITUDE_SET_ADDRESS);
 }
 
 int Persistence::getLatitude() {
-    return EEPROM.readInt(LATITUDE_ADDRESS);
+    // return EEPROM.readInt(LATITUDE_ADDRESS);
 }
 
 void Persistence::setLatitude(int val) {
-    EEPROM.writeInt(LATITUDE_ADDRESS, val);
+    // EEPROM.writeInt(LATITUDE_ADDRESS, val);
 }
 
 bool Persistence::isMagneticDeclinationSet() {
-    return EEPROM.readBool(MAGNETIC_DECLINATION_SET_ADDRESS);
+    // return EEPROM.readBool(MAGNETIC_DECLINATION_SET_ADDRESS);
 }
 
 int Persistence::getMagneticDeclination() {
-    return EEPROM.readInt(MAGNETIC_DECLINATION_ADDRESS);
+    // return EEPROM.readInt(MAGNETIC_DECLINATION_ADDRESS);
 }
 
 void Persistence::setMagneticDeclination(int val) {
-    EEPROM.writeInt(MAGNETIC_DECLINATION_ADDRESS, val);
+    // EEPROM.writeInt(MAGNETIC_DECLINATION_ADDRESS, val);
 }
 

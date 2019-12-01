@@ -1,0 +1,27 @@
+{
+  "name": "barndoor-tracker",
+  "version": "1.0.0",
+  "description": "Barn door tracker with:",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "preact-cli": "^2.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cgspeck/barndoor-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cgspeck/barndoor-tracker/issues"
+  },
+  "homepage": "https://github.com/cgspeck/barndoor-tracker#readme"
+}

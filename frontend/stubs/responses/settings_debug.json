@@ -1,0 +1,16 @@
+{
+  "apSettings": {
+    "ssid": "foo",
+    "key": "bar"
+  },
+  "debug": {
+    "currentMillis": 123
+  },
+  "location": {
+    "latitude": -37.74,
+    "magDeclination": 11.64,
+    "x_offset": 0,
+    "y_offset": 0,
+    "z_offset": 0
+  }
+}

@@ -3,15 +3,17 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/src/**",
-                "/usr/share/arduino/hardware/espressif/esp32/cores/esp32/**",
-                "/usr/share/arduino/hardware/espressif/esp32/variants/feather_esp32/",
-                "/usr/share/arduino/hardware/espressif/esp32/tools/sdk/include/**",
-                "/usr/share/arduino/hardware/espressif/esp32/libraries/EEPROM/src"
+                "${workspaceFolder}/esp32/cores/esp32/**",
+                "${workspaceFolder}/esp32/variants/esp32/**",
+                "${workspaceFolder}/esp32/tools/sdk/include/newlib/**",
+                "${workspaceFolder}/esp32/tools/sdk/include/**",
+                "${workspaceFolder}/esp32/libraries/**",
+                "${workspaceFolder}/libraries/**"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": false,
                 "path": [
+                    "${workspaceFolder}/esp32/libraries/*",
                     "/usr/lib/avr/include",
                     "/usr/share/arduino/hardware/espressif/esp32/tools/sdk/include",
                     "/usr/share/arduino/hardware/espressif/esp32/cores/esp32",
@@ -19,7 +21,9 @@
                     "${workspaceFolder}/src"
                 ]
             },
-            "defines": [],
+            "defines": [
+                "ESP32"
+            ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
             "cppStandard": "c++17",
