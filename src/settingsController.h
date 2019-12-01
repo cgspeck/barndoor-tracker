@@ -15,7 +15,14 @@ class SettingsController : public AsyncWebHandler {
     struct Config {
       char ssid[63];
       char key[63];
+      float latitude;
+      float magDeclination;
+      float x_offset;
+      float y_offset;
+      float z_offset;
+      bool locationSet;
     };
+
     Config config;
     const char *filename = "/config.json";
 
@@ -38,8 +45,13 @@ class SettingsController : public AsyncWebHandler {
     void _handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
     void _handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total);
 
+    // Location settings
+    void _handleLocationSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream * response);
+    void _handleLocationSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total);
+
     // internal document construction
     void _constructAPSettingsDoc(JsonObject *settingsObj);
+    void _constructLocationSettingsDoc(JsonObject *settingsObj);
 
   public:
     SettingsController();

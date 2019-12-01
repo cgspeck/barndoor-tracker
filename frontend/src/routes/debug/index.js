@@ -16,13 +16,14 @@ export default class Debug extends Component {
 			"magDeclination": null,
 			"x_offset": null,
 			"y_offset": null,
-			"z_offset": null
+			"z_offset": null,
+			"locationSet": null
 		}
 	}
 
 	async componentDidMount() {
 		getAllSettings().then(r => {
-			console.log('got response', r);
+			console.log('got debug response', r);
 			this.setState({...r})
 		});
 	}
@@ -31,6 +32,7 @@ export default class Debug extends Component {
 		return(
 			<div class={style.debug}>
 				<h1>Debug</h1>
+				<a href="/config.json">View/Download config.json</a>
 				<p>NODE_ENV: {JSON.stringify(process.env.NODE_ENV)}</p>
 				<p>currentMillis: {debug.currentMillis}</p>
 				<h2>AP Settings</h2>
@@ -42,6 +44,7 @@ export default class Debug extends Component {
 				<p>x_offset: {location.x_offset}</p>
 				<p>y_offset: {location.y_offset}</p>
 				<p>z_offset: {location.z_offset}</p>
+				<p>locationSet: {location.locationSet ? 'true' : 'false'}</p>
 			</div>
 		)
 	}
