@@ -1,7 +1,5 @@
 #include <Arduino.h>
 
-#define REPORT_INTEVAL 5000
-
 #include <DNSServer.h>
 #include <WiFi.h>
 #include <AsyncTCP.h>
@@ -13,6 +11,20 @@
 #include <ArduinoJson.h>
 // #include "runnable.h"
 #include "settingsController.h"
+
+#include "esp_wifi.h"
+
+#define REPORT_INTEVAL 5000
+
+// FEATURE SWITCHES
+//
+// CAUTION: ESP32 ASYNCWEBSERVER / ASYNCTCP appears too fragile to support this :-<
+// #define BD_ENABLE_CAPTURED_PORTAL
+//
+// Preact Router only works once bundle is loaded by client.
+// The next switch sends a user to /index.html if they happen to be on
+// a known route when they connect.
+#define BD_REWRITE_KNOWN_PAGES
 
 DNSServer dnsServer;
 AsyncWebServer server(80);
@@ -26,8 +38,16 @@ void notFoundHandler(AsyncWebServerRequest *request){
     response->addHeader("Allow", "OPTIONS, GET, POST");
     request->send(response);
   } else {
-    Serial.println("not found");
+    Serial.print("not found: ");
+    Serial.print(request->methodToString());
+    Serial.print(" ");
+    Serial.println(request->url());
+
+#ifdef BD_ENABLE_CAPTURED_PORTAL
+    request->redirect("/index.html");
+#else
     request->send(404);
+#endif
   }
 }
 
@@ -36,6 +56,7 @@ void setup() {
   Serial.println("start setup!");
   SPIFFS.begin(true);
   settingsController.setup();
+  esp_wifi_set_ps(WIFI_PS_NONE);
 
   if (settingsController.getKey() == "") {
     // Open AP mode
@@ -46,11 +67,20 @@ void setup() {
   dnsServer.start(53, "*", WiFi.softAPIP());
   // server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
   // ADD ALL CUSTOM HANDLERS HERE!!
-  server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+
+#ifdef BD_REWRITE_KNOWN_PAGES
+  // these urls are here incase client reconnects with a view already open
+  server.rewrite("/ap_settings", "/index.html");
+  server.rewrite("/debug", "/index.html");
+  server.rewrite("/location_settings", "/index.html");
+  server.rewrite("/track", "/index.html");
+#endif
+  // set up default & serve static content
+  server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setCacheControl("max-age=600");
   // Runnable::setupAll();
-  server.onNotFound(notFoundHandler);
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.addHandler(&settingsController);
+  server.onNotFound(notFoundHandler);
   server.begin();
   Serial.println("end setup!");
 }

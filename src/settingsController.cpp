@@ -106,12 +106,14 @@ void SettingsController::setDefaults() {
 };
 
 void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+    Serial.println("SettingsController::_handleFlagRequest start");
     const size_t capacity = JSON_OBJECT_SIZE(2);
     DynamicJsonDocument doc(capacity);
     doc["needsAPSettings"] = (strlen(config.key)  == 0);
     doc["needsLocationSettings"] = true;
     serializeJson(doc, *response);
     request->send(response);
+    Serial.println("SettingsController::_handleFlagRequest end");
 }
 
 bool SettingsController::canHandle(AsyncWebServerRequest *request) {
@@ -153,6 +155,7 @@ void SettingsController::handleRequest(AsyncWebServerRequest *request) {
 }
 */
 void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+    Serial.println("SettingsController::_handleDebugRequest start");
     const size_t capacity = JSON_OBJECT_SIZE(1) + 2*JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
 
@@ -164,6 +167,7 @@ void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, Asy
 
     serializeJson(doc, *response);
     request->send(response);
+    Serial.println("SettingsController::_handleDebugRequest end");
 }
 
 /*
@@ -173,12 +177,14 @@ void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, Asy
 }
 */
 void SettingsController::_handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+    Serial.println("SettingsController::_handleAPSettingsRequest start");
     const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
     JsonObject root = doc.to<JsonObject>();
     _constructAPSettingsDoc(&root);
     serializeJson(doc, *response);
     request->send(response);
+    Serial.println("SettingsController::_handleAPSettingsRequest end");
 };
 
 void SettingsController::_constructAPSettingsDoc(JsonObject *settingsObj) {
@@ -199,6 +205,7 @@ void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *dat
 }
 */
 void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total) {
+    Serial.println("SettingsController::_handleAPSettingsPost start");
     const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
 
@@ -242,6 +249,7 @@ void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, u
         REBOOT_REQUESTED = true;
         REBOOT_REQUESTED_AT = _currentMillis;
     }
+    Serial.println("SettingsController::_handleAPSettingsPost end");
 };
 
 const char * SettingsController::getSSID() {
