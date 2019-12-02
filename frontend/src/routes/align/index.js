@@ -3,7 +3,9 @@ import style from "./style";
 
 import TextField from "preact-material-components/TextField";
 import "preact-material-components/TextField/style.css";
-import LocationSettings from "../location_settings";
+
+import { getAlignStatus, getLocationSettings } from "../../lib/settings";
+import { setInterval } from "timers";
 
 export default class Align extends Component {
   state = {
@@ -17,6 +19,30 @@ export default class Align extends Component {
       currentAlt: null
     }
   };
+
+  async componentDidMount() {
+    getLocationSettings()
+      .then(r => {
+        this.setState({ locationSettings: { ...r } });
+        console.log("Starting Interval");
+        this.timer = setInterval(this.refreshAlignmentStatus.bind(this), 500);
+      })
+      .catch(e => this.handleError(e));
+  }
+
+  handleError = e => {
+    console.error("problem", e);
+    this.setState({ error: e });
+  };
+
+  async refreshAlignmentStatus() {
+    getAlignStatus().then(r => this.setState({ alignStatus: { ...r } }));
+  }
+
+  componentWillUnmount() {
+    console.log("Clearing timer");
+    clearInterval(this.timer._id);
+  }
 
   statusLabel = (azAligned, altAligned) => {
     if (azAligned && altAligned) {

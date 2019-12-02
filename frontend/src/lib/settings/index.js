@@ -48,8 +48,13 @@ async function getFlags() {
   return axios.get(`${config.endpoint}/flags`).then(r => r.data);
 }
 
+async function getAlignStatus() {
+  return axios.get(`${config.endpoint}/status/align`).then(r => r.data);
+}
+
 export {
   getAllSettings,
+  getAlignStatus,
   getAPSettings,
   getFlags,
   getLocationSettings,

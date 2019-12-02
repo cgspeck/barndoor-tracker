@@ -1,6 +1,7 @@
 import MockAdapter from "axios-mock-adapter";
 import {
   getAllSettings,
+  getAlignStatus,
   getAPSettings,
   getFlags,
   getLocationSettings,
@@ -149,6 +150,27 @@ describe("getFlags", () => {
     expect(res).toEqual({
       needsAPSettings: false,
       needsLocationSettings: true
+    });
+  });
+});
+
+describe("getAlignStatus", () => {
+  beforeEach(() => {
+    mock.onGet(`${config.endpoint}/status/align`).reply(200, {
+      azAligned: false,
+      altAligned: true,
+      currentAz: 110.3,
+      currentAlt: 37.3
+    });
+  });
+
+  it("returns expected value", async () => {
+    const res = await getAlignStatus();
+    expect(res).toEqual({
+      azAligned: false,
+      altAligned: true,
+      currentAz: 110.3,
+      currentAlt: 37.3
     });
   });
 });

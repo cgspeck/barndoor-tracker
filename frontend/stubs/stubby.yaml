@@ -35,14 +35,13 @@
         Content-Type: application/json
 
 - request:
-    url: /status/location
+    url: /status/align
     method: GET
   response:
     - status: 200
-      file: responses/status_location.json
+      file: responses/status_align.json
       headers:
         Content-Type: application/json
-
 # -  request:
 #       url: ^/settings/ap$
 #       method: OPTIONS
