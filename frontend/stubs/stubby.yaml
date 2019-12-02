@@ -35,29 +35,11 @@
         Content-Type: application/json
 
 - request:
-    url: /settings/location/x_offset
-    method: [POST]
+    url: /status/location
+    method: GET
   response:
     - status: 200
-      file: responses/settings_location.json
-      headers:
-        Content-Type: application/json
-
-- request:
-    url: /settings/location/y_offset
-    method: [POST]
-  response:
-    - status: 200
-      file: responses/settings_location.json
-      headers:
-        Content-Type: application/json
-
-- request:
-    url: /settings/location/z_offset
-    method: [POST]
-  response:
-    - status: 200
-      file: responses/settings_location.json
+      file: responses/status_location.json
       headers:
         Content-Type: application/json
 
