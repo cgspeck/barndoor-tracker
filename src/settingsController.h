@@ -19,6 +19,8 @@ private:
     char key[63];
     float latitude;
     float magDeclination;
+    float azError;
+    float altError;
     float xOffset;
     float yOffset;
     float zOffset;

@@ -6,9 +6,10 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
-SettingsController::SettingsController() {};
+SettingsController::SettingsController(){};
 
-void SettingsController::setup() {
+void SettingsController::setup()
+{
     _loadConfiguration(filename, config);
 };
 
@@ -18,6 +19,8 @@ void SettingsController::setup() {
 "key": "1234567890123456789012345678901234567890123456789012345678901234",
 "latitude": -37.74,
 "magDeclination": 11.64,
+"azError": 1.23,
+"altError": 3.56,
 "xOffset": -1.03,
 "yOffset": 0.54,
 "zOffset": -8.79,
@@ -25,61 +28,65 @@ void SettingsController::setup() {
 }
 */
 
-void SettingsController::_loadConfiguration(const char *filename, Config &config) {
+void SettingsController::_loadConfiguration(const char *filename, Config &config)
+{
     // Open file for reading
     File file = SPIFFS.open(filename);
 
     // Allocate a temporary JsonDocument
     // Don't forget to change the capacity to match your requirements.
     // Use arduinojson.org/v6/assistant to compute the capacity.
-    const size_t capacity = JSON_OBJECT_SIZE(8) + 230;
+    const size_t capacity = JSON_OBJECT_SIZE(10) + 240;
     DynamicJsonDocument doc(capacity);
     // Deserialize the JSON document
     DeserializationError error = deserializeJson(doc, file);
     bool writeDefaults = false;
 
-    if (error) {
+    if (error)
+    {
         Serial.println(F("Failed to read file, using default configuration"));
         writeDefaults = true;
     }
 
     // Copy strings from the JsonDocument to the Config
-    const char* ssid = doc["ssid"] | "barndoor_tracker";
+    const char *ssid = doc["ssid"] | "barndoor_tracker";
     strlcpy(
         config.ssid,
         ssid,
-        sizeof(config.ssid)
-    );
-    const char* key = doc["key"] | "";
+        sizeof(config.ssid));
+    const char *key = doc["key"] | "";
     strlcpy(
         config.key,
         key,
-        sizeof(config.key)
-    );
+        sizeof(config.key));
 
     // AP settings
     config.latitude = doc["latitude"] | -37.74;
     config.magDeclination = doc["magDeclination"] | 11.64;
+    config.azError = doc["azError"] | 1;
+    config.altError = doc["azError"] | 2;
     config.xOffset = doc["xOffset"] | 0;
     config.yOffset = doc["yOffset"] | 0;
     config.zOffset = doc["zOffset"] | 0;
     config.locationSet = doc["locationSet"] | false;
 
     file.close();
-    if (writeDefaults) {
-    _saveConfiguration(filename, config);
+    if (writeDefaults)
+    {
+        _saveConfiguration(filename, config);
     }
 };
 
-
-void SettingsController::_saveConfiguration(const char *filename, Config &config) {
+void SettingsController::_saveConfiguration(const char *filename, Config &config)
+{
     Serial.print("Saving ");
     Serial.println(filename);
     SPIFFS.remove(filename);
 
     // Open file for writing
     File file = SPIFFS.open(filename, FILE_WRITE);
-    if (!file) {
+    if (!file)
+    {
         Serial.println(F("Failed to create file"));
         return;
     }
@@ -87,7 +94,7 @@ void SettingsController::_saveConfiguration(const char *filename, Config &config
     // Allocate a temporary JsonDocument
     // Don't forget to change the capacity to match your requirements.
     // Use arduinojson.org/assistant to compute the capacity.
-    const size_t capacity = JSON_OBJECT_SIZE(8) + 230;
+    const size_t capacity = JSON_OBJECT_SIZE(10) + 240;
     DynamicJsonDocument doc(capacity);
 
     // Set the values in the document
@@ -99,13 +106,16 @@ void SettingsController::_saveConfiguration(const char *filename, Config &config
     // Location
     doc["latitude"] = config.latitude;
     doc["magDeclination"] = config.magDeclination;
+    doc["azError"] = config.azError;
+    doc["altError"] = config.altError;
     doc["xOffset"] = config.xOffset;
     doc["yOffset"] = config.yOffset;
     doc["zOffset"] = config.zOffset;
     doc["locationSet"] = config.locationSet;
 
     // Serialize JSON to file
-    if (serializeJson(doc, file) == 0) {
+    if (serializeJson(doc, file) == 0)
+    {
         Serial.println(F("Failed to write to file"));
     }
 
@@ -113,15 +123,18 @@ void SettingsController::_saveConfiguration(const char *filename, Config &config
     file.close();
 }
 
-void SettingsController::loop(unsigned long currentMillis) {
+void SettingsController::loop(unsigned long currentMillis)
+{
     _currentMillis = currentMillis;
-    if (REBOOT_REQUESTED && (unsigned long)(currentMillis - REBOOT_REQUESTED_AT) >= (int)REBOOT_DELAY_MILLIS) {
+    if (REBOOT_REQUESTED && (unsigned long)(currentMillis - REBOOT_REQUESTED_AT) >= (int)REBOOT_DELAY_MILLIS)
+    {
         Serial.println("Rebooting");
         ESP.restart();
     }
 };
 
-void SettingsController::setDefaults() {
+void SettingsController::setDefaults()
+{
     // delete the config.json file
     Serial.print("Deleting ");
     Serial.println(filename);
@@ -135,51 +148,72 @@ void SettingsController::setDefaults() {
     REBOOT_REQUESTED = true;
 };
 
-void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+void SettingsController::_handleFlagRequest(AsyncWebServerRequest *request, AsyncResponseStream *response)
+{
     Serial.println("SettingsController::_handleFlagRequest start");
     const size_t capacity = JSON_OBJECT_SIZE(2);
     DynamicJsonDocument doc(capacity);
-    doc["needsAPSettings"] = (strlen(config.key)  == 0);
+    doc["needsAPSettings"] = (strlen(config.key) == 0);
     doc["needsLocationSettings"] = !config.locationSet;
     serializeJson(doc, *response);
     request->send(response);
     Serial.println("SettingsController::_handleFlagRequest end");
 }
 
-bool SettingsController::canHandle(AsyncWebServerRequest *request) {
+bool SettingsController::canHandle(AsyncWebServerRequest *request)
+{
     bool _canHandle = false;
-    if (request->url() == "/settings/debug" && request->method() == HTTP_GET) {
+    if (request->url() == "/settings/debug" && request->method() == HTTP_GET)
+    {
         _canHandle = true;
-    } else if (request->url() == "/settings/ap" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST))) {
+    }
+    else if (request->url() == "/settings/ap" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST)))
+    {
         _canHandle = true;
-    } else if (request->url() == "/flags" && request->method() == HTTP_GET) {
+    }
+    else if (request->url() == "/flags" && request->method() == HTTP_GET)
+    {
         _canHandle = true;
-    } else if (request->url() == "/settings/location" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST))) {
+    }
+    else if (request->url() == "/settings/location" && ((request->method() == HTTP_GET) || (request->method() == HTTP_POST)))
+    {
         _canHandle = true;
     }
 
     return _canHandle;
 }
 
-void SettingsController::handleRequest(AsyncWebServerRequest *request) {
+void SettingsController::handleRequest(AsyncWebServerRequest *request)
+{
     // create a response with content-type header set
     AsyncResponseStream *response = request->beginResponseStream("application/json");
 
-    if (request->url() == "/flags") {
+    if (request->url() == "/flags")
+    {
         _handleFlagRequest(request, response);
-    } else if (request->url() == "/settings/debug") {
+    }
+    else if (request->url() == "/settings/debug")
+    {
         _handleDebugRequest(request, response);
-    } else if (request->url() == "/settings/ap") {
+    }
+    else if (request->url() == "/settings/ap")
+    {
         _handleAPSettingsRequest(request, response);
-    }  else if (request->url() == "/settings/location") {
+    }
+    else if (request->url() == "/settings/location")
+    {
         _handleLocationSettingsRequest(request, response);
     }
 }
 
-void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-    if (request->url() == "/settings/ap" && request->method() == HTTP_POST) {
+void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (request->url() == "/settings/ap" && request->method() == HTTP_POST)
+    {
         _handleAPSettingsPost(request, data, total);
-    } else if (request->url() == "/settings/location" && request->method() == HTTP_POST) {
+    }
+    else if (request->url() == "/settings/location" && request->method() == HTTP_POST)
+    {
         _handleLocationSettingsPost(request, data, total);
     }
 }
@@ -197,6 +231,8 @@ void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *dat
    "location": {
        "latitude": -37.74,
         "magDeclination": 11.64,
+        "azError": 1.23,
+        "altError": 3.56,
         "xOffset": -1.03,
         "yOffset": 0.54,
         "zOffset": -8.79,
@@ -204,9 +240,10 @@ void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *dat
     }
 }
 */
-void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, AsyncResponseStream *response)
+{
     Serial.println("SettingsController::_handleDebugRequest start");
-    const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(6) + 270;
+    const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(8) + 290;
     DynamicJsonDocument doc(capacity);
 
     JsonObject debug = doc.createNestedObject("debug");
@@ -223,7 +260,8 @@ void SettingsController::_handleDebugRequest(AsyncWebServerRequest *request, Asy
     Serial.println("SettingsController::_handleDebugRequest end");
 }
 
-void SettingsController::_handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+void SettingsController::_handleAPSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response)
+{
     Serial.println("SettingsController::_handleAPSettingsRequest start");
     const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
@@ -241,52 +279,56 @@ void SettingsController::_handleAPSettingsRequest(AsyncWebServerRequest *request
 }
 */
 
-void SettingsController::_constructAPSettingsDoc(JsonObject *settingsObj) {
+void SettingsController::_constructAPSettingsDoc(JsonObject *settingsObj)
+{
     settingsObj->operator[]("ssid") = config.ssid;
     settingsObj->operator[]("key") = config.key;
 }
 
-void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total) {
+void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total)
+{
     Serial.println("SettingsController::_handleAPSettingsPost start");
     const size_t capacity = JSON_OBJECT_SIZE(2) + 160;
     DynamicJsonDocument doc(capacity);
 
     DeserializationError error = deserializeJson(doc, data);
 
-    if(error) {
-      Serial.print("bad json: ");
-      Serial.println(error.c_str());
-      request->send(total > capacity ? 413 : 400);
-      return;
+    if (error)
+    {
+        Serial.print("bad json: ");
+        Serial.println(error.c_str());
+        request->send(total > capacity ? 413 : 400);
+        return;
     }
     bool settingsChanged = false;
 
-    const char* ssid = doc["ssid"];
-    if (ssid && (strcmp(ssid, config.ssid) != 0)) {
+    const char *ssid = doc["ssid"];
+    if (ssid && (strcmp(ssid, config.ssid) != 0))
+    {
         Serial.print("rcd ssid:");
         Serial.println(ssid);
 
         strlcpy(
             config.ssid,
             ssid,
-            sizeof(config.ssid)
-        );
+            sizeof(config.ssid));
         settingsChanged = true;
     }
 
-    const char* key = doc["key"];
-    if (key && (strcmp(key, config.key) != 0)) {
+    const char *key = doc["key"];
+    if (key && (strcmp(key, config.key) != 0))
+    {
         Serial.print("rcd key:");
         Serial.println(key);
         strlcpy(
             config.key,
             key,
-            sizeof(config.key)
-        );
+            sizeof(config.key));
         settingsChanged = true;
     }
 
-    if (settingsChanged) {
+    if (settingsChanged)
+    {
         _saveConfiguration(filename, config);
         REBOOT_REQUESTED = true;
         REBOOT_REQUESTED_AT = _currentMillis;
@@ -294,9 +336,22 @@ void SettingsController::_handleAPSettingsPost(AsyncWebServerRequest *request, u
     Serial.println("SettingsController::_handleAPSettingsPost end");
 };
 
-void SettingsController::_handleLocationSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response) {
+/*
+{
+    "latitude": -37.74,
+    "magDeclination": 11.64,
+    "azError": 1.23,
+    "altError": 3.56,
+    "xOffset": -1.03,
+    "yOffset": 0.54,
+    "zOffset": -8.79,
+    "locationSet": true
+}
+*/
+void SettingsController::_handleLocationSettingsRequest(AsyncWebServerRequest *request, AsyncResponseStream *response)
+{
     Serial.println("SettingsController::_handleLocationSettingsRequest start");
-    const size_t capacity = JSON_OBJECT_SIZE(6);
+    const size_t capacity = JSON_OBJECT_SIZE(8);
     DynamicJsonDocument doc(capacity);
     JsonObject root = doc.to<JsonObject>();
     _constructLocationSettingsDoc(&root);
@@ -305,66 +360,79 @@ void SettingsController::_handleLocationSettingsRequest(AsyncWebServerRequest *r
     Serial.println("SettingsController::_handleLocationSettingsRequest end");
 };
 
-/*
+void SettingsController::_constructLocationSettingsDoc(JsonObject *settingsObj)
 {
-    "latitude": -37.74,
-    "magDeclination": 11.64,
-    "xOffset": -1.03,
-    "yOffset": 0.54,
-    "zOffset": -8.79,
-    "locationSet": true
-}
-*/
-void SettingsController::_constructLocationSettingsDoc(JsonObject *settingsObj) {
     settingsObj->operator[]("latitude") = config.latitude;
     settingsObj->operator[]("magDeclination") = config.magDeclination;
+    settingsObj->operator[]("azError") = config.azError;
+    settingsObj->operator[]("altError") = config.altError;
     settingsObj->operator[]("xOffset") = config.xOffset;
     settingsObj->operator[]("yOffset") = config.yOffset;
     settingsObj->operator[]("zOffset") = config.zOffset;
     settingsObj->operator[]("locationSet") = config.locationSet;
 }
 
-void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total) {
+void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *request, uint8_t *data, size_t total)
+{
     Serial.println("SettingsController::_handleLocationSettingsPost start");
-    const size_t capacity = JSON_OBJECT_SIZE(6) + 70;
+    const size_t capacity = JSON_OBJECT_SIZE(8) + 90;
     DynamicJsonDocument doc(capacity);
 
     DeserializationError error = deserializeJson(doc, data);
 
-    if(error) {
-      Serial.print("bad json: ");
-      Serial.println(error.c_str());
-      request->send(total > capacity ? 413 : 400);
-      return;
+    if (error)
+    {
+        Serial.print("bad json: ");
+        Serial.println(error.c_str());
+        request->send(total > capacity ? 413 : 400);
+        return;
     }
     bool settingsChanged = false;
 
-    if (doc.containsKey("latitude")) {
+    if (doc.containsKey("latitude"))
+    {
         config.latitude = doc["latitude"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("magDeclination")) {
+    if (doc.containsKey("magDeclination"))
+    {
         config.magDeclination = doc["magDeclination"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("xOffset")) {
+    if (doc.containsKey("azError"))
+    {
+        config.azError = doc["azError"];
+        settingsChanged = true;
+    }
+
+    if (doc.containsKey("altError"))
+    {
+        config.altError = doc["altError"];
+        settingsChanged = true;
+    }
+
+    if (doc.containsKey("xOffset"))
+    {
         config.xOffset = doc["xOffset"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("yOffset")) {
+    if (doc.containsKey("yOffset"))
+    {
         config.yOffset = doc["yOffset"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("zOffset")) {
+    if (doc.containsKey("zOffset"))
+    {
         config.zOffset = doc["zOffset"];
         settingsChanged = true;
     }
 
-    if (settingsChanged) {
+    if (settingsChanged)
+    {
         config.locationSet = true;
         _saveConfiguration(filename, config);
     }
@@ -372,11 +440,13 @@ void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *requ
     Serial.println("SettingsController::_handleLocationSettingsPost end");
 };
 
-const char * SettingsController::getSSID() {
+const char *SettingsController::getSSID()
+{
     return config.ssid;
 };
 
-const char * SettingsController::getKey() {
+const char *SettingsController::getKey()
+{
     return config.key;
 };
 
@@ -389,10 +459,12 @@ const char * SettingsController::getKey() {
  * @param max_connection    Max simultaneous connected clients, 1 - 4.
 
  */
-const char * _validateSSID(char* val) {
+const char *_validateSSID(char *val)
+{
     return "";
 }
 
-const char * _validateKey(char* val) {
+const char *_validateKey(char *val)
+{
     return "";
 }
