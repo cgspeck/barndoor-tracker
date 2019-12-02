@@ -18,9 +18,9 @@ void SettingsController::setup() {
 "key": "1234567890123456789012345678901234567890123456789012345678901234",
 "latitude": -37.74,
 "magDeclination": 11.64,
-"x_offset": -1.03,
-"y_offset": 0.54,
-"z_offset": -8.79,
+"xOffset": -1.03,
+"yOffset": 0.54,
+"zOffset": -8.79,
 "locationSet": true
 }
 */
@@ -60,9 +60,9 @@ void SettingsController::_loadConfiguration(const char *filename, Config &config
     // AP settings
     config.latitude = doc["latitude"] | -37.74;
     config.magDeclination = doc["magDeclination"] | 11.64;
-    config.x_offset = doc["x_offset"] | 0;
-    config.y_offset = doc["y_offset"] | 0;
-    config.z_offset = doc["z_offset"] | 0;
+    config.xOffset = doc["xOffset"] | 0;
+    config.yOffset = doc["yOffset"] | 0;
+    config.zOffset = doc["zOffset"] | 0;
     config.locationSet = doc["locationSet"] | false;
 
     file.close();
@@ -99,9 +99,9 @@ void SettingsController::_saveConfiguration(const char *filename, Config &config
     // Location
     doc["latitude"] = config.latitude;
     doc["magDeclination"] = config.magDeclination;
-    doc["x_offset"] = config.x_offset;
-    doc["y_offset"] = config.y_offset;
-    doc["z_offset"] = config.z_offset;
+    doc["xOffset"] = config.xOffset;
+    doc["yOffset"] = config.yOffset;
+    doc["zOffset"] = config.zOffset;
     doc["locationSet"] = config.locationSet;
 
     // Serialize JSON to file
@@ -197,9 +197,9 @@ void SettingsController::handleBody(AsyncWebServerRequest *request, uint8_t *dat
    "location": {
        "latitude": -37.74,
         "magDeclination": 11.64,
-        "x_offset": -1.03,
-        "y_offset": 0.54,
-        "z_offset": -8.79,
+        "xOffset": -1.03,
+        "yOffset": 0.54,
+        "zOffset": -8.79,
         "locationSet": true
     }
 }
@@ -309,18 +309,18 @@ void SettingsController::_handleLocationSettingsRequest(AsyncWebServerRequest *r
 {
     "latitude": -37.74,
     "magDeclination": 11.64,
-    "x_offset": -1.03,
-    "y_offset": 0.54,
-    "z_offset": -8.79,
+    "xOffset": -1.03,
+    "yOffset": 0.54,
+    "zOffset": -8.79,
     "locationSet": true
 }
 */
 void SettingsController::_constructLocationSettingsDoc(JsonObject *settingsObj) {
     settingsObj->operator[]("latitude") = config.latitude;
     settingsObj->operator[]("magDeclination") = config.magDeclination;
-    settingsObj->operator[]("x_offset") = config.x_offset;
-    settingsObj->operator[]("y_offset") = config.y_offset;
-    settingsObj->operator[]("z_offset") = config.z_offset;
+    settingsObj->operator[]("xOffset") = config.xOffset;
+    settingsObj->operator[]("yOffset") = config.yOffset;
+    settingsObj->operator[]("zOffset") = config.zOffset;
     settingsObj->operator[]("locationSet") = config.locationSet;
 }
 
@@ -349,18 +349,18 @@ void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *requ
         settingsChanged = true;
     }
 
-    if (doc.containsKey("x_offset")) {
-        config.x_offset = doc["x_offset"];
+    if (doc.containsKey("xOffset")) {
+        config.xOffset = doc["xOffset"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("y_offset")) {
-        config.y_offset = doc["y_offset"];
+    if (doc.containsKey("yOffset")) {
+        config.yOffset = doc["yOffset"];
         settingsChanged = true;
     }
 
-    if (doc.containsKey("z_offset")) {
-        config.z_offset = doc["z_offset"];
+    if (doc.containsKey("zOffset")) {
+        config.zOffset = doc["zOffset"];
         settingsChanged = true;
     }
 
