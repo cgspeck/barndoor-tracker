@@ -42,11 +42,21 @@ export default class LocationSettings extends Component {
     const {
       latitude,
       magDeclination,
+      azError,
+      altError,
       xOffset,
       yOffset,
       zOffset
     } = this.state.locationSettings;
-    setLocationSettings(latitude, magDeclination, xOffset, yOffset, zOffset)
+    setLocationSettings(
+      latitude,
+      magDeclination,
+      azError,
+      altError,
+      xOffset,
+      yOffset,
+      zOffset
+    )
       .then(r => this.setState({ info: "Location settings updated." }))
       .catch(e => this.handleError(e));
   };

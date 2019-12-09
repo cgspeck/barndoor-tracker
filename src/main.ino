@@ -109,10 +109,11 @@ void loop()
 
   if (settingsController.alignConfigHasChanged())
   {
+    /*
     AlignConfig ac = settingsController.getAlignConfig();
-    alignController.loadSettings(
-        ac.latitude, ac.magDeclination, ac.azError, ac.altError,
-        ac.xOffset, ac.yOffset, ac.zOffset);
+    alignController.loadSettings(settingsController.getAlignConfig());
+    */
+    alignController.loadSettings(settingsController.getAlignConfig());
   }
   alignController.loop(currentMillis);
 }
