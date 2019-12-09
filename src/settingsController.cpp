@@ -6,24 +6,14 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
+#include "alignConfig.h"
+
 SettingsController::SettingsController(){};
 
-void SettingsController::setup(AlignController *alignController)
+void SettingsController::setup()
 {
-    alignController = alignController;
     _loadConfiguration(filename, config);
-    _dispatchAlignControllerSettings();
-};
-
-void SettingsController::_dispatchAlignControllerSettings()
-{
-    Serial.println("SettingsController::__dispatchAlignControllerSettings: start");
-    alignController->loadSettings(
-        config.latitude, config.magDeclination,
-        config.azError, config.altError,
-        config.xOffset, config.yOffset, config.zOffset
-    );
-    Serial.println("SettingsController::__dispatchAlignControllerSettings: end");
+    _alignConfigHasChanged = true;
 }
 
 /*
@@ -448,7 +438,7 @@ void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *requ
     {
         config.locationSet = true;
         _saveConfiguration(filename, config);
-        _dispatchAlignControllerSettings();
+        _alignConfigHasChanged = true;
     }
 
     Serial.println("SettingsController::_handleLocationSettingsPost end");
@@ -481,4 +471,23 @@ const char *_validateSSID(char *val)
 const char *_validateKey(char *val)
 {
     return "";
+}
+
+bool SettingsController::alignConfigHasChanged()
+{
+    return _alignConfigHasChanged;
+}
+
+AlignConfig SettingsController::getAlignConfig()
+{
+    _alignConfigHasChanged = false;
+    AlignConfig ac = {
+        .latitude = config.latitude,
+        .magDeclination = config.magDeclination,
+        .azError = config.azError,
+        .altError = config.altError,
+        .xOffset = config.xOffset,
+        .yOffset = config.yOffset,
+        .zOffset = config.zOffset};
+    return ac;
 }

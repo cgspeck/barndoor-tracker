@@ -10,10 +10,11 @@
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 
+#include "esp_wifi.h"
+
+#include "alignConfig.h"
 #include "alignController.h"
 #include "settingsController.h"
-
-#include "esp_wifi.h"
 
 #define REPORT_INTEVAL 5000
 
@@ -32,12 +33,16 @@ AsyncWebServer server(80);
 AlignController alignController;
 SettingsController settingsController;
 
-void notFoundHandler(AsyncWebServerRequest *request){
-  if (request->method() == HTTP_OPTIONS) {
+void notFoundHandler(AsyncWebServerRequest *request)
+{
+  if (request->method() == HTTP_OPTIONS)
+  {
     AsyncWebServerResponse *response = request->beginResponse(204);
     response->addHeader("Allow", "OPTIONS, GET, POST");
     request->send(response);
-  } else {
+  }
+  else
+  {
     Serial.print("not found: ");
     Serial.print(request->methodToString());
     Serial.print(" ");
@@ -51,18 +56,22 @@ void notFoundHandler(AsyncWebServerRequest *request){
   }
 }
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   Serial.println("start setup!");
   SPIFFS.begin(true);
+  settingsController.setup();
   alignController.setup();
-  settingsController.setup(&alignController);
   esp_wifi_set_ps(WIFI_PS_NONE);
 
-  if (settingsController.getKey() == "") {
+  if (settingsController.getKey() == "")
+  {
     // Open AP mode
     WiFi.softAP(settingsController.getSSID());
-  } else {
+  }
+  else
+  {
     WiFi.softAP(settingsController.getSSID(), settingsController.getKey());
   }
   dnsServer.start(53, "*", WiFi.softAPIP());
@@ -87,13 +96,23 @@ void setup() {
 
 unsigned long prevReport = 0;
 
-void loop() {
+void loop()
+{
   unsigned long currentMillis = millis();
-  if ((unsigned long)(currentMillis - prevReport) >= (int)REPORT_INTEVAL) {
+  if ((unsigned long)(currentMillis - prevReport) >= (int)REPORT_INTEVAL)
+  {
     Serial.println("alive!");
     prevReport = currentMillis;
   }
   dnsServer.processNextRequest();
   settingsController.loop(currentMillis);
+
+  if (settingsController.alignConfigHasChanged())
+  {
+    AlignConfig ac = settingsController.getAlignConfig();
+    alignController.loadSettings(
+        ac.latitude, ac.magDeclination, ac.azError, ac.altError,
+        ac.xOffset, ac.yOffset, ac.zOffset);
+  }
   alignController.loop(currentMillis);
 }

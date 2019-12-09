@@ -8,7 +8,7 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
-#include "alignController.h"
+#include "alignConfig.h"
 
 #define REBOOT_DELAY_MILLIS 5000
 
@@ -59,14 +59,13 @@ private:
   void _constructAPSettingsDoc(JsonObject *settingsObj);
   void _constructLocationSettingsDoc(JsonObject *settingsObj);
 
-  // handles to other controllers so we can message them when our config changes
-  AlignController* alignController;
-  void _dispatchAlignControllerSettings();
+  // hooks so main loop knows when to update other controllers
+  bool _alignConfigHasChanged;
 
 public:
   SettingsController();
 
-  void setup(AlignController *alignController);
+  void setup();
   void loop(unsigned long currentMilLis);
 
   void setDefaults();
@@ -77,6 +76,9 @@ public:
 
   const char *getSSID();
   const char *getKey();
+
+  bool alignConfigHasChanged();
+  AlignConfig getAlignConfig();
 };
 
 #endif
