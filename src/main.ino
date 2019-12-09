@@ -55,8 +55,8 @@ void setup() {
   Serial.begin(115200);
   Serial.println("start setup!");
   SPIFFS.begin(true);
-  settingsController.setup();
   alignController.setup();
+  settingsController.setup(&alignController);
   esp_wifi_set_ps(WIFI_PS_NONE);
 
   if (settingsController.getKey() == "") {

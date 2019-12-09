@@ -8,10 +8,23 @@
 
 SettingsController::SettingsController(){};
 
-void SettingsController::setup()
+void SettingsController::setup(AlignController *alignController)
 {
+    alignController = alignController;
     _loadConfiguration(filename, config);
+    _dispatchAlignControllerSettings();
 };
+
+void SettingsController::_dispatchAlignControllerSettings()
+{
+    Serial.println("SettingsController::__dispatchAlignControllerSettings: start");
+    alignController->loadSettings(
+        config.latitude, config.magDeclination,
+        config.azError, config.altError,
+        config.xOffset, config.yOffset, config.zOffset
+    );
+    Serial.println("SettingsController::__dispatchAlignControllerSettings: end");
+}
 
 /*
 {
@@ -435,6 +448,7 @@ void SettingsController::_handleLocationSettingsPost(AsyncWebServerRequest *requ
     {
         config.locationSet = true;
         _saveConfiguration(filename, config);
+        _dispatchAlignControllerSettings();
     }
 
     Serial.println("SettingsController::_handleLocationSettingsPost end");

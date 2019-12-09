@@ -61,11 +61,12 @@ private:
 
   // handles to other controllers so we can message them when our config changes
   AlignController* alignController;
+  void _dispatchAlignControllerSettings();
 
 public:
   SettingsController();
 
-  void setup();
+  void setup(AlignController *alignController);
   void loop(unsigned long currentMilLis);
 
   void setDefaults();
