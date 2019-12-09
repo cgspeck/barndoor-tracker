@@ -9,7 +9,8 @@
 
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
-// #include "runnable.h"
+
+#include "alignController.h"
 #include "settingsController.h"
 
 #include "esp_wifi.h"
@@ -28,9 +29,8 @@
 
 DNSServer dnsServer;
 AsyncWebServer server(80);
+AlignController alignController;
 SettingsController settingsController;
-
-// Runnable *Runnable::headRunnable = NULL;
 
 void notFoundHandler(AsyncWebServerRequest *request){
   if (request->method() == HTTP_OPTIONS) {
@@ -56,6 +56,7 @@ void setup() {
   Serial.println("start setup!");
   SPIFFS.begin(true);
   settingsController.setup();
+  alignController.setup();
   esp_wifi_set_ps(WIFI_PS_NONE);
 
   if (settingsController.getKey() == "") {
@@ -65,7 +66,7 @@ void setup() {
     WiFi.softAP(settingsController.getSSID(), settingsController.getKey());
   }
   dnsServer.start(53, "*", WiFi.softAPIP());
-  // server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+
   // ADD ALL CUSTOM HANDLERS HERE!!
 
 #ifdef BD_REWRITE_KNOWN_PAGES
@@ -77,7 +78,6 @@ void setup() {
 #endif
   // set up default & serve static content
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setCacheControl("max-age=600");
-  // Runnable::setupAll();
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.addHandler(&settingsController);
   server.onNotFound(notFoundHandler);
@@ -95,5 +95,5 @@ void loop() {
   }
   dnsServer.processNextRequest();
   settingsController.loop(currentMillis);
-  // Runnable::loopAll();
+  alignController.loop(currentMillis);
 }

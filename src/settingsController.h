@@ -8,6 +8,8 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
+#include "alignController.h"
+
 #define REBOOT_DELAY_MILLIS 5000
 
 class SettingsController : public AsyncWebHandler
@@ -56,6 +58,9 @@ private:
   // internal document construction
   void _constructAPSettingsDoc(JsonObject *settingsObj);
   void _constructLocationSettingsDoc(JsonObject *settingsObj);
+
+  // handles to other controllers so we can message them when our config changes
+  AlignController* alignController;
 
 public:
   SettingsController();

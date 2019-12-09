@@ -22,7 +22,8 @@
                 ]
             },
             "defines": [
-                "ESP32"
+                "ESP32",
+                "ARDUINO=101"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",

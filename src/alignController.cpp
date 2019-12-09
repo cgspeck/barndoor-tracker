@@ -8,6 +8,8 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncJson.h>
 
+AlignController::AlignController(){};
+
 void AlignController::setup() {
     if (imu.begin() == false) {
         Serial.println("Failed to communicate with LSM9DS1.");
@@ -98,7 +100,7 @@ void AlignController::loop(unsigned long currentMillis) {
             _config.xOffset, _config.yOffset, _config.zOffset
         );
 
-        _azAligned = (_currentAzimuth >= _config.minAzimuth && 
+        _azAligned = (_currentAzimuth >= _config.minAzimuth &&
             _currentAzimuth <= _config.maxAzimuth);
 
         // heading
