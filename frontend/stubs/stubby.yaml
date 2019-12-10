@@ -35,32 +35,13 @@
         Content-Type: application/json
 
 - request:
-    url: /settings/location/x_offset
-    method: [POST]
+    url: /status/align
+    method: GET
   response:
     - status: 200
-      file: responses/settings_location.json
+      file: responses/status_align.json
       headers:
         Content-Type: application/json
-
-- request:
-    url: /settings/location/y_offset
-    method: [POST]
-  response:
-    - status: 200
-      file: responses/settings_location.json
-      headers:
-        Content-Type: application/json
-
-- request:
-    url: /settings/location/z_offset
-    method: [POST]
-  response:
-    - status: 200
-      file: responses/settings_location.json
-      headers:
-        Content-Type: application/json
-
 # -  request:
 #       url: ^/settings/ap$
 #       method: OPTIONS

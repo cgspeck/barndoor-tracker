@@ -9,10 +9,12 @@
 
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
-// #include "runnable.h"
-#include "settingsController.h"
 
 #include "esp_wifi.h"
+
+#include "alignConfig.h"
+#include "alignController.h"
+#include "settingsController.h"
 
 #define REPORT_INTEVAL 5000
 
@@ -28,16 +30,19 @@
 
 DNSServer dnsServer;
 AsyncWebServer server(80);
+AlignController alignController;
 SettingsController settingsController;
 
-// Runnable *Runnable::headRunnable = NULL;
-
-void notFoundHandler(AsyncWebServerRequest *request){
-  if (request->method() == HTTP_OPTIONS) {
+void notFoundHandler(AsyncWebServerRequest *request)
+{
+  if (request->method() == HTTP_OPTIONS)
+  {
     AsyncWebServerResponse *response = request->beginResponse(204);
     response->addHeader("Allow", "OPTIONS, GET, POST");
     request->send(response);
-  } else {
+  }
+  else
+  {
     Serial.print("not found: ");
     Serial.print(request->methodToString());
     Serial.print(" ");
@@ -51,21 +56,26 @@ void notFoundHandler(AsyncWebServerRequest *request){
   }
 }
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   Serial.println("start setup!");
   SPIFFS.begin(true);
   settingsController.setup();
+  alignController.setup();
   esp_wifi_set_ps(WIFI_PS_NONE);
 
-  if (settingsController.getKey() == "") {
+  if (settingsController.getKey() == "")
+  {
     // Open AP mode
     WiFi.softAP(settingsController.getSSID());
-  } else {
+  }
+  else
+  {
     WiFi.softAP(settingsController.getSSID(), settingsController.getKey());
   }
   dnsServer.start(53, "*", WiFi.softAPIP());
-  // server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+
   // ADD ALL CUSTOM HANDLERS HERE!!
 
 #ifdef BD_REWRITE_KNOWN_PAGES
@@ -77,9 +87,9 @@ void setup() {
 #endif
   // set up default & serve static content
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setCacheControl("max-age=600");
-  // Runnable::setupAll();
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.addHandler(&settingsController);
+  server.addHandler(&alignController);
   server.onNotFound(notFoundHandler);
   server.begin();
   Serial.println("end setup!");
@@ -87,13 +97,24 @@ void setup() {
 
 unsigned long prevReport = 0;
 
-void loop() {
+void loop()
+{
   unsigned long currentMillis = millis();
-  if ((unsigned long)(currentMillis - prevReport) >= (int)REPORT_INTEVAL) {
+  if ((unsigned long)(currentMillis - prevReport) >= (int)REPORT_INTEVAL)
+  {
     Serial.println("alive!");
     prevReport = currentMillis;
   }
   dnsServer.processNextRequest();
   settingsController.loop(currentMillis);
-  // Runnable::loopAll();
+
+  if (settingsController.alignConfigHasChanged())
+  {
+    /*
+    AlignConfig ac = settingsController.getAlignConfig();
+    alignController.loadSettings(settingsController.getAlignConfig());
+    */
+    alignController.loadSettings(settingsController.getAlignConfig());
+  }
+  alignController.loop(currentMillis);
 }

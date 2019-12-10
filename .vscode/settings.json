@@ -71,7 +71,12 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "*.ipp": "cpp",
+        "hash_map": "cpp"
     },
-    "C_Cpp.intelliSenseEngineFallback": "Disabled"
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "cSpell.words": [
+        "println"
+    ]
 }

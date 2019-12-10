@@ -10,3 +10,6 @@
 [submodule "libraries/AsyncTCP"]
 	path = libraries/AsyncTCP
 	url = https://github.com/me-no-dev/AsyncTCP.git
+[submodule "libraries/SparkFun_LSM9DS1"]
+	path = libraries/SparkFun_LSM9DS1
+	url = https://github.com/sparkfun/SparkFun_LSM9DS1_Arduino_Library.git
