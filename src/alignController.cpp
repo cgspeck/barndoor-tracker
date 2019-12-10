@@ -27,7 +27,7 @@ void AlignController::setup()
     }
 }
 
-float AlignController::_calculateAzimuth(
+float AlignController::_calculateAltitude(
     float ax, float ay, float az,
     float ox, float oy, float oz)
 {
@@ -41,7 +41,7 @@ float AlignController::_calculateAzimuth(
     return pitch;
 }
 
-float AlignController::_calculateAltitude(
+float AlignController::_calculateAzimuth(
     float mx, float my,
     float ox, float oy,
     float declination)
@@ -80,20 +80,20 @@ void AlignController::loadSettings(const AlignConfig &alignConfig)
 
     if (alignConfig.latitude <= 0)
     {
-        _config.targetAltitude = 180;
-        _config.minAltitude = 180 - alignConfig.altError;
-        _config.maxAltitude = 180 + alignConfig.altError;
+        _config.targetAzimuth = 180;
+        _config.minAzimuth = 180 - alignConfig.azError;
+        _config.maxAzimuth = 180 + alignConfig.azError;
     }
     else
     {
-        _config.targetAltitude = 0;
-        _config.minAltitude = 360 - alignConfig.altError;
-        _config.maxAltitude = alignConfig.altError;
+        _config.targetAzimuth = 0;
+        _config.minAzimuth = 360 - alignConfig.azError;
+        _config.maxAzimuth = alignConfig.azError;
     }
 
-    _config.targetAzimuth = abs(alignConfig.latitude);
-    _config.minAzimuth = _config.targetAzimuth - alignConfig.azError;
-    _config.maxAzimuth = _config.targetAzimuth + alignConfig.azError;
+    _config.targetAltitude = abs(alignConfig.latitude);
+    _config.minAltitude = _config.targetAltitude - alignConfig.altError;
+    _config.maxAltitude = _config.targetAltitude + alignConfig.altError;
 
     Serial.print("AlignController::loadSettings: latitude ");
     Serial.print(_config.latitude);
@@ -129,34 +129,38 @@ void AlignController::loop(unsigned long currentMillis)
     if ((currentMillis - _previousCalcMillis) >= (int)ALIGN_CALC_INTERVAL)
     {
         Serial.println("AlignController::loop: start recalc");
-        // pitch up/down
-        _currentAzimuth = _calculateAzimuth(
-            imu.ax, imu.ay, imu.az,
-            _config.xOffset, _config.yOffset, _config.zOffset);
-
-        _azAligned = (_currentAzimuth >= _config.minAzimuth &&
-                      _currentAzimuth <= _config.maxAzimuth);
-
         // heading
-        _currentAltitude = _calculateAltitude(
+        _currentAzimuth = _calculateAzimuth(
             imu.mx, imu.my,
             _config.xOffset, _config.yOffset,
             _config.magDeclination);
 
-        _altAligned = _calculateIsAltitudeAligned(
-            _currentAltitude, _config.targetAzimuth,
-            _config.minAltitude, _config.maxAltitude);
+        _azAligned = _calculateIsAzimuthAligned(
+            _currentAzimuth, _config.targetAzimuth,
+            _config.minAzimuth, _config.minAzimuth);
+
+        // pitch up/down
+        _currentAltitude = _calculateAltitude(
+            imu.ax, imu.ay, imu.az,
+            _config.xOffset, _config.yOffset, _config.zOffset);
+
+        _altAligned = (_currentAltitude >= _config.minAltitude &&
+                       _currentAltitude <= _config.maxAltitude);
 
         _previousCalcMillis = currentMillis;
-        Serial.print("AlignController::loop: _currentAltitude=");
+        Serial.print("AlignController::loop: _currentAzimuth=");
+        Serial.print(_currentAzimuth);
+        Serial.print(" _azAligned=");
+        Serial.print(_azAligned);
+        Serial.print(" _currentAltitude=");
         Serial.print(_currentAltitude);
-        Serial.print(" _currentAzimuth=");
-        Serial.println(_currentAzimuth);
+        Serial.print(" _altAligned=");
+        Serial.println(_altAligned);
         Serial.println("AlignController::loop: start recalc");
     }
 }
 
-bool AlignController::_calculateIsAltitudeAligned(
+bool AlignController::_calculateIsAzimuthAligned(
     float currentHeading,
     float targetHeading,
     float minHeading,

@@ -43,8 +43,8 @@ export default class Debug extends Component {
         <h2>Location Settings</h2>
         <p>Latitude: {location.latitude}</p>
         <p>magDeclination: {location.magDeclination}</p>
-        <p>altError: {location.altError}</p>
         <p>azError: {location.azError}</p>
+        <p>altError: {location.altError}</p>
         <p>xOffset: {location.xOffset}</p>
         <p>yOffset: {location.yOffset}</p>
         <p>zOffset: {location.zOffset}</p>

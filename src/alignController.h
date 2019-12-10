@@ -46,16 +46,16 @@ private:
 
   // declination corrected heading
   float _calculateAltitude(
+      float ax, float ay, float az,
+      float ox, float oy, float oz);
+
+  // pitch up/down
+  float _calculateAzimuth(
       float mx, float my,
       float ox, float oy,
       float declination);
 
-  // pitch up/down
-  float _calculateAzimuth(
-      float ax, float ay, float az,
-      float ox, float oy, float oz);
-
-  bool _calculateIsAltitudeAligned(
+  bool _calculateIsAzimuthAligned(
       float currentHeading,
       float targetHeading,
       float minHeading,
