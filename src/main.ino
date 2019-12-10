@@ -89,6 +89,7 @@ void setup()
   server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setCacheControl("max-age=600");
   DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
   server.addHandler(&settingsController);
+  server.addHandler(&alignController);
   server.onNotFound(notFoundHandler);
   server.begin();
   Serial.println("end setup!");
