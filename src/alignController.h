@@ -12,7 +12,7 @@
 #include "alignConfig.h"
 #include "constants.h"
 
-#define ALIGN_CALC_INTERVAL 330
+#define ALIGN_CALC_INTERVAL 500
 
 class AlignController : public AsyncWebHandler
 {
