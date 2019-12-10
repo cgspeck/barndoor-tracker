@@ -64,6 +64,11 @@ float AlignController::_calculateAzimuth(
 
     heading *= 180.0 / PI;
 
+    if (heading < 0)
+    {
+        heading = heading + 360;
+    }
+
     return heading;
 }
 
