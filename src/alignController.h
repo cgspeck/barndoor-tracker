@@ -10,6 +10,7 @@
 #include <AsyncJson.h>
 
 #include "alignConfig.h"
+#include "constants.h"
 
 #define ALIGN_CALC_INTERVAL 330
 

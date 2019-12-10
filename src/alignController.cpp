@@ -14,10 +14,16 @@ AlignController::AlignController(){};
 
 void AlignController::setup()
 {
-    if (imu.begin() == false)
+    // imu.beginSPI(), which verifies communication with the IMU
+    // and turns it on.
+    if (imu.beginSPI(LSM9DS1_AG_CS, LSM9DS1_M_CS) == false) // note, we need to sent this our CS pins (defined above)
     {
         Serial.println("Failed to communicate with LSM9DS1.");
         Serial.println("Double-check wiring.");
+        Serial.println("Default settings in this sketch will "
+                       "work for an out of the box LSM9DS1 "
+                       "Breakout, but may need to be modified "
+                       "if the board jumpers are.");
     }
 }
 
@@ -142,6 +148,10 @@ void AlignController::loop(unsigned long currentMillis)
             _config.minAltitude, _config.maxAltitude);
 
         _previousCalcMillis = currentMillis;
+        Serial.print("AlignController::loop: _currentAltitude=");
+        Serial.print(_currentAltitude);
+        Serial.print(" _currentAzimuth=");
+        Serial.println(_currentAzimuth);
         Serial.println("AlignController::loop: start recalc");
     }
 }
