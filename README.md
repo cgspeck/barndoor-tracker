@@ -1,12 +1,8 @@
 # ESP32 Barndoor tracker
 
-Barn door tracker with:
+This project is abandoned in favour of [Barndoor Tracker Pi](https://github.com/cgspeck/barndoor-tracker-pi).
 
-* touch screen interface
-* alignment guidance (digital compass)
-* alignment guidance (latitude)
-* intervalometer
-* dew control
+It remains here as an example of a `Makefile` based Arduino / ESP32 project.
 
 Fresh clone? see [Getting Started]
 
